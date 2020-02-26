@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="subaction_get_placeid_contacts" name="My process" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <serviceTask id="servicetask1" name="Obter detalhes do establecimento" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
+      <extensionElements>
+        <activiti:field name="serviceURL">
+          <activiti:expression>http://localhost:8280/place_contacts/${place_id}</activiti:expression>
+        </activiti:field>
+        <activiti:field name="method">
+          <activiti:string>GET</activiti:string>
+        </activiti:field>
+        <activiti:field name="outputVariable">
+          <activiti:string>rest_out</activiti:string>
+        </activiti:field>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var rest_out = execution.getVariable('rest_out');
+rest_out = JSON.parse(rest_out);
+
+print("rest_out" + JSON.stringify(rest_out));
+
+var res = rest_out.result;
+
+print("res" + res);
+
+var price_label = ["Grátis", "Barato", "Moderado", "Caro", "Muito Caro"];
+
+var name = res.name;
+var price_level = res.price_level || "Sem informação";
+var rating = res.rating || "Sem informação";
+var phone = res.international_phone_number || "Sem informação";
+var url = res.url || "Sem informação";
+var website = res.website || "Sem informação";
+
+if (typeof price_level == 'number') {
+	price_level = price_label[price_level];
+}
+
+if (typeof res.rating == 'number') {
+	rating = res.rating +"/5";
+}
+
+execution.setVariable('name', name);
+execution.setVariable('price_level', price_level);
+execution.setVariable('rating', rating);
+execution.setVariable('phone', phone);
+execution.setVariable('url', url);
+execution.setVariable('website', website);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("Starting REST action to get place details");
+print("place_id "+place_id);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="servicetask1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="servicetask1" targetRef="terminateendevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_subaction_get_placeid_contacts">
+    <bpmndi:BPMNPlane bpmnElement="subaction_get_placeid_contacts" id="BPMNPlane_subaction_get_placeid_contacts">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="150.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="360.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="71.0" width="105.0" x="220.0" y="132.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="185.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="167.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="325.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="167.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

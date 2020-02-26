@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="main_process" name="Main Process" isExecutable="true">
+    <startEvent id="startevent1" name="Start" activiti:initiator="admin">
+      <extensionElements>
+        <activiti:formProperty id="assignees" name="Assignees separated by coma" type="string" default="manager,admin"></activiti:formProperty>
+        <activiti:formProperty id="decision_maker" name="Decisor" type="string" default="admin" required="true"></activiti:formProperty>
+        <activiti:formProperty id="timeout" name="Tempo limite (segundos)" type="string" default="60" required="true"></activiti:formProperty>
+        <activiti:formProperty id="admin_suggestion" name="Sugestão para convidados" type="string"></activiti:formProperty>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var timeout_var = execution.getVariable('timeout');
+execution.setVariable('timeout_seconds',timeout_var);
+print("Timeout_seconds var set to: "+timeout_var);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <callActivity id="callactivity1" name="Cozinhar" calledElement="action_cozinhar_process">
+      <extensionElements>
+        <activiti:in source="assignees" target="assignees"></activiti:in>
+        <activiti:in source="admin_suggestion" target="admin_suggestion"></activiti:in>
+        <activiti:in source="rest_mappings" target="rest_mappings"></activiti:in>
+        <activiti:in source="desired_type" target="desired_type"></activiti:in>
+        <activiti:in source="cousine_decision" target="cousine_decision"></activiti:in>
+        <activiti:in source="decision_method" target="decision_method"></activiti:in>
+        <activiti:in source="rest_url" target="rest_url"></activiti:in>
+        <activiti:in source="choice_array" target="choice_array"></activiti:in>
+        <activiti:in source="decision_name" target="decision_name"></activiti:in>
+        <activiti:in source="decision_maker" target="decision_maker"></activiti:in>
+        <activiti:in source="timeout_seconds" target="timeout_seconds"></activiti:in>
+        <activiti:out source="dish_decision" target="dish_decision"></activiti:out>
+        <activiti:out source="dish_ingredients" target="dish_ingredients"></activiti:out>
+        <activiti:out source="location" target="location"></activiti:out>
+        <activiti:out source="location_city" target="location_city"></activiti:out>
+        <activiti:out source="location_zip" target="location_zip"></activiti:out>
+        <activiti:out source="place_name" target="place_name"></activiti:out>
+        <activiti:out source="place_address" target="place_address"></activiti:out>
+        <activiti:out source="place_gps" target="place_gps"></activiti:out>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("----end of process cozinhar-");
+print("final dish ingredients were: ");
+var dish_ingredients = execution.getVariable('dish_ingredients');
+print(dish_ingredients);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="callactivity4" name="Fazer votação: -Cozinhar -Comer Fora -Encomendar" calledElement="decision">
+      <extensionElements>
+        <activiti:in source="assignees" target="assignees"></activiti:in>
+        <activiti:in source="admin_suggestion" target="admin_suggestion"></activiti:in>
+        <activiti:in source="rest_mappings" target="rest_mappings"></activiti:in>
+        <activiti:in source="desired_type" target="desired_type"></activiti:in>
+        <activiti:in source="decision_method" target="decision_method"></activiti:in>
+        <activiti:in source="decision_name" target="decision_name"></activiti:in>
+        <activiti:in source="choice_array" target="choice_array"></activiti:in>
+        <activiti:in source="decision_maker" target="decision_maker"></activiti:in>
+        <activiti:in source="timeout_seconds" target="timeout_seconds"></activiti:in>
+        <activiti:out source="decision_result" target="action_decision"></activiti:out>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[// REST
+rest_url=null
+rest_mappings=null
+
+
+// Decision
+decision_name="Ação"
+decision_method="voto"
+choice_array = "Cozinhar,Comer fora,Encomendar"
+desired_type = "string"
+
+// Make atributions
+execution.setVariable('rest_url',rest_url);
+execution.setVariable('rest_mappings',rest_mappings);
+execution.setVariable('decision_method',decision_method);
+execution.setVariable('choice_array',choice_array);
+execution.setVariable('desired_type',desired_type);
+execution.setVariable('decision_name', decision_name);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="callactivity5" name="Fazer votação: Escolha de cuisine" calledElement="decision">
+      <extensionElements>
+        <activiti:in source="assignees" target="assignees"></activiti:in>
+        <activiti:in source="admin_suggestion" target="admin_suggestion"></activiti:in>
+        <activiti:in source="rest_mappings" target="rest_mappings"></activiti:in>
+        <activiti:in source="desired_type" target="desired_type"></activiti:in>
+        <activiti:in source="decision_method" target="decision_method"></activiti:in>
+        <activiti:in source="rest_url" target="rest_url"></activiti:in>
+        <activiti:in source="choice_array" target="choice_array"></activiti:in>
+        <activiti:in source="decision_name" target="decision_name"></activiti:in>
+        <activiti:in source="decision_maker" target="decision_maker"></activiti:in>
+        <activiti:in source="timeout_seconds" target="timeout_seconds"></activiti:in>
+        <activiti:out source="decision_result" target="cousine_decision"></activiti:out>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[// REST
+//rest_url="https://www.themealdb.com/api/json/v1/1/list.php?a=list"
+//rest_mappings="rest_result:$.meals[*].strArea"
+rest_url = null
+rest_mappings = null
+
+// Decision
+decision_name = "Cousine"
+decision_method = "voto"
+choice_array = "American,British,Canadian,Chinese,Dutch,Egyptian,French,Greek,Indian,Irish,Italian,Jamaican,Japanese,Malaysian,Mexican,Moroccan,Russian,Spanish,Thai,Unknown,Vietnamese"
+desired_type = "string"
+
+// Make atributions
+execution.setVariable('rest_url', rest_url);
+execution.setVariable('rest_mappings', rest_mappings);
+execution.setVariable('decision_name', decision_name);
+execution.setVariable('decision_method', decision_method);
+execution.setVariable('choice_array', choice_array);
+execution.setVariable('desired_type', desired_type);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("-----------------END OF 1st MODULES-------------");
+var action_decision = execution.getVariable('action_decision');
+var cousine_decision = execution.getVariable('cousine_decision');
+print("action decision was: "+action_decision);
+print("cousine decision was: "+cousine_decision);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="callactivity6" name="Comer fora" calledElement="action_restaurante_process">
+      <extensionElements>
+        <activiti:in source="assignees" target="assignees"></activiti:in>
+        <activiti:in source="admin_suggestion" target="admin_suggestion"></activiti:in>
+        <activiti:in source="rest_mappings" target="rest_mappings"></activiti:in>
+        <activiti:in source="desired_type" target="desired_type"></activiti:in>
+        <activiti:in source="cousine_decision" target="cousine_decision"></activiti:in>
+        <activiti:in source="decision_method" target="decision_method"></activiti:in>
+        <activiti:in source="rest_url" target="rest_url"></activiti:in>
+        <activiti:in source="decision_name" target="decision_name"></activiti:in>
+        <activiti:in source="decision_maker" target="decision_maker"></activiti:in>
+        <activiti:in source="timeout_seconds" target="timeout_seconds"></activiti:in>
+        <activiti:out source="location" target="location"></activiti:out>
+        <activiti:out source="location_city" target="location_city"></activiti:out>
+        <activiti:out source="location_zip" target="location_zip"></activiti:out>
+        <activiti:out source="place_name" target="place_name"></activiti:out>
+        <activiti:out source="place_address" target="place_address"></activiti:out>
+        <activiti:out source="place_gps" target="place_gps"></activiti:out>
+        <activiti:out source="transport_decision" target="transport_decision"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="callactivity7" name="Encomendar" calledElement="action_encomendar_process">
+      <extensionElements>
+        <activiti:in source="assignees" target="assignees"></activiti:in>
+        <activiti:in source="admin_suggestion" target="admin_suggestion"></activiti:in>
+        <activiti:in source="rest_mappings" target="rest_mappings"></activiti:in>
+        <activiti:in source="desired_type" target="desired_type"></activiti:in>
+        <activiti:in source="cousine_decision" target="cousine_decision"></activiti:in>
+        <activiti:in source="decision_method" target="decision_method"></activiti:in>
+        <activiti:in source="rest_url" target="rest_url"></activiti:in>
+        <activiti:in source="decision_name" target="decision_name"></activiti:in>
+        <activiti:in source="decision_maker" target="decision_maker"></activiti:in>
+        <activiti:in source="timeout_seconds" target="timeout_seconds"></activiti:in>
+        <activiti:out source="location" target="location"></activiti:out>
+        <activiti:out source="location_city" target="location_city"></activiti:out>
+        <activiti:out source="location_zip" target="location_zip"></activiti:out>
+        <activiti:out source="place_name" target="place_name"></activiti:out>
+        <activiti:out source="place_address" target="place_address"></activiti:out>
+        <activiti:out source="place_gps" target="place_gps"></activiti:out>
+        <activiti:out source="dish_results" target="dish_results"></activiti:out>
+        <activiti:out source="address" target="encomenda_address"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow37" sourceRef="exclusivegateway2" targetRef="callactivity1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action_decision == 'Cozinhar'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow42" sourceRef="exclusivegateway2" targetRef="callactivity6">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action_decision == 'Comer fora'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow43" sourceRef="exclusivegateway2" targetRef="callactivity7">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action_decision == 'Encomendar'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow35" sourceRef="callactivity4" targetRef="callactivity5"></sequenceFlow>
+    <sequenceFlow id="flow46" sourceRef="callactivity5" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow47" sourceRef="startevent1" targetRef="callactivity4"></sequenceFlow>
+    <callActivity id="callactivity8" name="Confirmação final" calledElement="final_report">
+      <extensionElements>
+        <activiti:in source="action_decision" target="action_decision"></activiti:in>
+        <activiti:in source="cousine_decision" target="cousine_decision"></activiti:in>
+        <activiti:in source="location" target="location"></activiti:in>
+        <activiti:in source="location_city" target="location_city"></activiti:in>
+        <activiti:in source="location_zip" target="location_zip"></activiti:in>
+        <activiti:in source="place_name" target="place_name"></activiti:in>
+        <activiti:in source="place_address" target="place_address"></activiti:in>
+        <activiti:in source="place_gps" target="place_gps"></activiti:in>
+        <activiti:in source="dish_decision" target="dish_decision"></activiti:in>
+        <activiti:in source="dish_ingredients" target="dish_ingredients"></activiti:in>
+        <activiti:in source="dish_results" target="dish_results"></activiti:in>
+        <activiti:in source="transport_decision" target="transport_decision"></activiti:in>
+        <activiti:in source="encomenda_address" target="encomenda_address"></activiti:in>
+        <activiti:in source="decision_maker" target="decision_maker"></activiti:in>
+        <activiti:in source="timeout_seconds" target="timeout_seconds"></activiti:in>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow48" sourceRef="callactivity6" targetRef="callactivity8"></sequenceFlow>
+    <sequenceFlow id="flow49" sourceRef="callactivity1" targetRef="callactivity8"></sequenceFlow>
+    <sequenceFlow id="flow50" sourceRef="callactivity7" targetRef="callactivity8"></sequenceFlow>
+    <sequenceFlow id="flow51" sourceRef="callactivity8" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_main_process">
+    <bpmndi:BPMNPlane bpmnElement="main_process" id="BPMNPlane_main_process">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="70.0" y="122.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="890.0" y="121.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="500.0" y="119.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="55.0" width="105.0" x="584.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity4" id="BPMNShape_callactivity4">
+        <omgdc:Bounds height="92.0" width="141.0" x="142.0" y="94.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity5" id="BPMNShape_callactivity5">
+        <omgdc:Bounds height="95.0" width="130.0" x="322.0" y="91.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity6" id="BPMNShape_callactivity6">
+        <omgdc:Bounds height="55.0" width="105.0" x="584.0" y="111.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity7" id="BPMNShape_callactivity7">
+        <omgdc:Bounds height="55.0" width="105.0" x="586.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity8" id="BPMNShape_callactivity8">
+        <omgdc:Bounds height="55.0" width="105.0" x="740.0" y="111.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow37" id="BPMNEdge_flow37">
+        <omgdi:waypoint x="520.0" y="119.0"></omgdi:waypoint>
+        <omgdi:waypoint x="519.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="584.0" y="57.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
+        <omgdi:waypoint x="540.0" y="139.0"></omgdi:waypoint>
+        <omgdi:waypoint x="584.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow43" id="BPMNEdge_flow43">
+        <omgdi:waypoint x="520.0" y="159.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="586.0" y="217.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow35" id="BPMNEdge_flow35">
+        <omgdi:waypoint x="283.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="322.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow46" id="BPMNEdge_flow46">
+        <omgdi:waypoint x="452.0" y="138.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="139.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">
+        <omgdi:waypoint x="105.0" y="139.0"></omgdi:waypoint>
+        <omgdi:waypoint x="142.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
+        <omgdi:waypoint x="689.0" y="138.0"></omgdi:waypoint>
+        <omgdi:waypoint x="740.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow49" id="BPMNEdge_flow49">
+        <omgdi:waypoint x="689.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="792.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="792.0" y="111.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow50" id="BPMNEdge_flow50">
+        <omgdi:waypoint x="691.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="792.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="792.0" y="166.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow51" id="BPMNEdge_flow51">
+        <omgdi:waypoint x="845.0" y="138.0"></omgdi:waypoint>
+        <omgdi:waypoint x="890.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

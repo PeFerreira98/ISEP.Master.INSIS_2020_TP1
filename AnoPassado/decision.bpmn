@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="decision" name="Decisao Cozinhar, comer fora ou encomendar" isExecutable="true">
+    <startEvent id="startevent1" name="Start">
+      <extensionElements>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var decision_name = execution.getVariable('decision_name' );
+print("--Inside Decision process--");
+print("--Decision: "+decision_name+" --");
+
+// Convert from JavaScript Array to Java ArrayList
+var assigneesvar = (execution.getVariable("assignees"));
+var assignees = "";
+if(assigneesvar != null)
+  assignees = assigneesvar.split(",");
+  
+var ArrayList = Java.type("java.util.ArrayList");
+var assigneeList = new ArrayList();
+for (var i=0; i<assignees.length; i++){
+  assigneeList.add(assignees[i]);
+}
+execution.setVariable('assignees',assigneeList );
+
+// Convert from string to JavaScript Array
+var choice_array = execution.getVariable('choice_array');
+if (choice_array!=null){
+	choice_array = choice_array.split(",");
+	choice_array = JSON.stringify(choice_array);
+}
+execution.setVariable('choice_array',choice_array);
+
+// Set conditional variables
+var rest_url = execution.getVariable('rest_url');
+if (choice_array==null){
+	execution.setVariable('is_vote', "false");
+} else {
+	execution.setVariable('is_vote', "true");	
+	print("is a vote!");
+}
+if (rest_url==null){
+	execution.setVariable('has_rest', "false");
+} else {
+	execution.setVariable('has_rest', "true");
+	print("has rest!");
+}
+
+//DEBUG
+print("Choice Array: "+choice_array);
+print("Assignee List: " + assigneeList);
+print("rest_url "+rest_url);
+var rest_mappings = execution.getVariable('rest_mappings');
+var decision_method = execution.getVariable('decision_method');
+print("rest_mappings "+rest_mappings);
+print("decision_method is: "+decision_method);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </startEvent>
+    <userTask id="usertask1" name="Registar decisão de ${decision_name}" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:formProperty id="admin_suggestion" name="Sugestão do decisor" type="string" variable="admin_suggestion" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="assignee_choice" name="Voto" type="table" variable="choice_array"></activiti:formProperty>
+        <activiti:formProperty id="assignee_comment" name="Comentário" type="string" default=" "></activiti:formProperty>
+        <activiti:formProperty id="choice_details" name="Detalhes" type="mlstring" variable="choice_details" writable="false"></activiti:formProperty>
+        <activiti:taskListener event="complete" class="org.activiti.engine.impl.bpmn.listener.ScriptTaskListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var assignee = (task.execution).getVariable('assignee');
+var assignee_comment = (task.execution).getVariable('assignee_comment');
+var decision_results = (task.execution).getVariable('decision_results');
+if (decision_results == null){
+	decision_results = "";
+}
+
+print("Vote result for: ");
+
+
+print(assignee+" =>  "+assignee_choice+" | Comentário "+assignee_comment+"\n");
+decision_results += (assignee+"=>  "+assignee_choice+" | Comentário: "+assignee_comment+"\n");
+print(assignee+"made a choice. Current decisions string:\n"+decision_results);
+(task.execution).setVariable('decision_results',decision_results);]]></activiti:expression>
+          </activiti:field>
+        </activiti:taskListener>
+        <activiti:taskListener event="create" class="org.activiti.engine.impl.bpmn.listener.ScriptTaskListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var has_rest = (task.execution).getVariable('has_rest');
+if (has_rest == 'true'){
+	var rest_result = (task.execution).getVariable('rest_result');
+	(task.execution).setVariable('choice_array', rest_result);
+	print("set the choice_array to: "+rest_result);
+}]]></activiti:expression>
+          </activiti:field>
+        </activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="assignees" activiti:elementVariable="assignee">
+        <completionCondition>${0==1}</completionCondition>
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="usertask2" name="Rever votos e tomar decisão final de ${decision_name}" activiti:assignee="${decision_maker}">
+      <extensionElements>
+        <activiti:formProperty id="decision_results" name="Resultados das decisoes" type="mlstring" variable="decision_results" required="true"></activiti:formProperty>
+        <activiti:formProperty id="decision_result" name="Decisao Final" type="table" variable="choice_array"></activiti:formProperty>
+        <activiti:taskListener event="create" class="org.activiti.engine.impl.bpmn.listener.ScriptTaskListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("fim de rever votacao");]]></activiti:expression>
+          </activiti:field>
+        </activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="servicetask1" name="Obter lista de possíveis decisões" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
+      <extensionElements>
+        <activiti:field name="serviceURL">
+          <activiti:expression>${rest_url}</activiti:expression>
+        </activiti:field>
+        <activiti:field name="method">
+          <activiti:string>GET</activiti:string>
+        </activiti:field>
+        <activiti:field name="outputMappings">
+          <activiti:expression>${rest_mappings}</activiti:expression>
+        </activiti:field>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("executed REST task");
+var rest_result = execution.getVariable('rest_result', rest_result);
+var rest_result_parsed = JSON.parse(rest_result);
+var rest_result_string = JSON.stringify(rest_result_parsed);
+print("results: "+rest_result_string);
+execution.setVariable('rest_result', rest_result_string);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("starting REST Task");]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <userTask id="usertask3" name="Rever escolhas de ${decision_name}" activiti:assignee="${decision_maker}">
+      <extensionElements>
+        <activiti:formProperty id="decision_results" name="Escolhas dos utilizadores" type="mlstring" variable="decision_results" required="true"></activiti:formProperty>
+        <activiti:taskListener event="create" class="org.activiti.engine.impl.bpmn.listener.ScriptTaskListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("Fim de rever rescolhas");]]></activiti:expression>
+          </activiti:field>
+        </activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <boundaryEvent id="boundarytimer1" name="Timeout response" attachedToRef="usertask1" cancelActivity="false">
+      <extensionElements>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var decision_results = execution.getVariable('decision_results');
+if (decision_results == null){
+	decision_results = "";
+}
+
+print("Vote result for: ");
+
+
+print(" Some assignee(s) timed out.  "+"\n");
+decision_results += (" Some assignee(s) timed out.  "+"\n");
+print(" timed out. Current decisions string:\n"+decision_results);
+execution.setVariable('decision_results',decision_results);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <timerEventDefinition>
+        <timeDuration>PT${timeout_seconds}S</timeDuration>
+      </timerEventDefinition>
+    </boundaryEvent>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <extensionElements>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var decision_result = execution.getVariable('decision_result');
+var decision_results = execution.getVariable('decision_results');
+
+if (decision_result !== null) {
+	print("Decision result: " + decision_result);
+}
+if (decision_results !== null) {
+	print("Decision results: " + decision_results);
+}
+print("Fim modulo deicison.");]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow4" name="voto" sourceRef="exclusivegateway3" targetRef="usertask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${decision_method=='voto'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow8" name="lista existente" sourceRef="exclusivegateway2" targetRef="usertask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${has_rest=='false'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow11" name="escolha" sourceRef="exclusivegateway3" targetRef="usertask3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${decision_method=='escolha'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" name="obter lista REST" sourceRef="exclusivegateway2" targetRef="servicetask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${has_rest=='true'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="servicetask1" targetRef="usertask1"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="startevent1" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow17" name="decisão única" sourceRef="usertask2" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow18" name="multiplas escolhas" sourceRef="usertask3" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="usertask1" targetRef="exclusivegateway3"></sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="boundarytimer1" targetRef="exclusivegateway3"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_decision">
+    <bpmndi:BPMNPlane bpmnElement="decision" id="BPMNPlane_decision">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="10.0" y="192.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="69.0" width="105.0" x="340.0" y="174.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
+        <omgdc:Bounds height="30.0" width="30.0" x="410.0" y="231.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
+        <omgdc:Bounds height="83.0" width="105.0" x="643.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="75.0" width="105.0" x="180.0" y="78.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask3" id="BPMNShape_usertask3">
+        <omgdc:Bounds height="70.0" width="105.0" x="643.0" y="251.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
+        <omgdc:Bounds height="40.0" width="40.0" x="588.0" y="188.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="91.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="808.0" y="197.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="608.0" y="188.0"></omgdi:waypoint>
+        <omgdi:waypoint x="608.0" y="122.0"></omgdi:waypoint>
+        <omgdi:waypoint x="643.0" y="121.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="21.0" x="576.0" y="153.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="131.0" y="210.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="208.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="66.0" x="200.0" y="209.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="608.0" y="228.0"></omgdi:waypoint>
+        <omgdi:waypoint x="608.0" y="285.0"></omgdi:waypoint>
+        <omgdi:waypoint x="643.0" y="286.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="38.0" x="568.0" y="250.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="111.0" y="190.0"></omgdi:waypoint>
+        <omgdi:waypoint x="111.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="180.0" y="115.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="76.0" x="32.0" y="141.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="285.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="392.0" y="115.0"></omgdi:waypoint>
+        <omgdi:waypoint x="392.0" y="174.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="45.0" y="209.0"></omgdi:waypoint>
+        <omgdi:waypoint x="91.0" y="210.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="748.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="825.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="825.0" y="197.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="67.0" x="761.0" y="99.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="748.0" y="286.0"></omgdi:waypoint>
+        <omgdi:waypoint x="825.0" y="286.0"></omgdi:waypoint>
+        <omgdi:waypoint x="825.0" y="232.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="88.0" x="761.0" y="298.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="445.0" y="208.0"></omgdi:waypoint>
+        <omgdi:waypoint x="588.0" y="208.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="440.0" y="246.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="245.0"></omgdi:waypoint>
+        <omgdi:waypoint x="608.0" y="228.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
