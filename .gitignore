@@ -1,15 +1,10 @@
 .bpmn/
 .settings/
-target/
-deployment/
+[Tt]arget/
+[Dd]eployment/
 
 .classpath
 .project
 
 *.bpmn2d
 *.bar
-
-.bpmn/src/main/resources/diagrams/Main.bpmn2d
-.bpmn/src/main/resources/diagrams/action_cozinhar.bpmn2d
-.bpmn/src/main/resources/diagrams/decision.bpmn2d
-deployment/Main.bar
