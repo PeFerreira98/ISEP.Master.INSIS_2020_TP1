@@ -17,11 +17,11 @@
         <flowNodeRef>usertask3</flowNodeRef>
         <flowNodeRef>exclusivegateway1</flowNodeRef>
         <flowNodeRef>endevent1</flowNodeRef>
-        <flowNodeRef>endevent3</flowNodeRef>
       </lane>
       <lane id="lane6" name="New lane">
         <flowNodeRef>usertask5</flowNodeRef>
         <flowNodeRef>exclusivegateway3</flowNodeRef>
+        <flowNodeRef>endevent3</flowNodeRef>
         <flowNodeRef>usertask7</flowNodeRef>
         <flowNodeRef>exclusivegateway4</flowNodeRef>
         <flowNodeRef>endevent4</flowNodeRef>
