@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="propoeAquisicaoDiagram" name="propoeAquisicaoDiagram" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <callActivity id="callactivity1" name="PropoeAquisicaoGetData" calledElement="propoeAquisicaoGetDataDiagram"></callActivity>
+    <userTask id="usertask1" name="PropoeAquisicao">
+      <extensionElements>
+        <activiti:formProperty id="titulo1" name="Titulo" type="string" default="Titulo1" required="true"></activiti:formProperty>
+        <activiti:formProperty id="autores1" name="Autores" type="string" default="Autor1" required="true"></activiti:formProperty>
+        <activiti:formProperty id="publishYear1" name="Ano de Publicação" type="long" default="2020" required="true"></activiti:formProperty>
+        <activiti:formProperty id="knowledgeArea" name="Area de Conhecimento" type="string" default="AreaCon1" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="callactivity1" targetRef="usertask1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_propoeAquisicaoDiagram">
+    <bpmndi:BPMNPlane bpmnElement="propoeAquisicaoDiagram" id="BPMNPlane_propoeAquisicaoDiagram">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="50.0" y="44.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="350.0" y="34.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="560.0" y="44.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="64.0" width="105.0" x="160.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="85.0" y="61.0"></omgdi:waypoint>
+        <omgdi:waypoint x="160.0" y="62.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="455.0" y="61.0"></omgdi:waypoint>
+        <omgdi:waypoint x="560.0" y="61.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="265.0" y="62.0"></omgdi:waypoint>
+        <omgdi:waypoint x="350.0" y="61.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

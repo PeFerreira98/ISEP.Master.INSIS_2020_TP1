@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="propoeAquisicaoGetDataDiagram" name="propoeAquisicaoGetDataDiagram" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
+    <parallelGateway id="parallelgateway2" name="Parallel Gateway"></parallelGateway>
+    <serviceTask id="servicetask1" name="GetListAreaConh" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
+      <extensionElements>
+        <activiti:field name="serviceURL">
+          <activiti:string>http://www.mocky.io/v2/5e642e4334000057003387db</activiti:string>
+        </activiti:field>
+        <activiti:field name="method">
+          <activiti:string>GET</activiti:string>
+        </activiti:field>
+        <activiti:field name="outputVariable">
+          <activiti:string>GetListAreaConhResult</activiti:string>
+        </activiti:field>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression>
+              <![CDATA[print(GetListAreaConhResult);]]>
+            </activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="servicetask2" name="GetListaPolos" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
+      <extensionElements>
+        <activiti:field name="serviceURL">
+          <activiti:string>http://www.mocky.io/v2/5e6431a634000064003387e1</activiti:string>
+        </activiti:field>
+        <activiti:field name="method">
+          <activiti:string>GET</activiti:string>
+        </activiti:field>
+        <activiti:field name="outputVariable">
+          <activiti:string>GetListaProbsResult</activiti:string>
+        </activiti:field>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression>
+              <![CDATA[print(GetListaProbsResult);]]>
+            </activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="parallelgateway1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="parallelgateway1" targetRef="servicetask1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="parallelgateway1" targetRef="servicetask2"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="servicetask2" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="servicetask1" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="parallelgateway2" targetRef="terminateendevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_propoeAquisicaoGetDataDiagram">
+    <bpmndi:BPMNPlane bpmnElement="propoeAquisicaoGetDataDiagram" id="BPMNPlane_propoeAquisicaoGetDataDiagram">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="50.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="480.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway1" id="BPMNShape_parallelgateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="140.0" y="97.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="250.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask2" id="BPMNShape_servicetask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="250.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway2" id="BPMNShape_parallelgateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="410.0" y="97.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="85.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="140.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="160.0" y="97.0"></omgdi:waypoint>
+        <omgdi:waypoint x="160.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="47.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="160.0" y="137.0"></omgdi:waypoint>
+        <omgdi:waypoint x="160.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="187.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="355.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="137.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="355.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="430.0" y="97.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="450.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="480.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
