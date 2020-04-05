@@ -3,8 +3,8 @@
 [Tt]arget/
 [Dd]eployment/
 
-.classpath
-.project
+#.classpath
+#.project
 
 *.bpmn2d
 *.bar
