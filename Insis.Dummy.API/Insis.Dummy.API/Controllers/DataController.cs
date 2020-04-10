@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
+using Insis.Dummy.API.Models;
 
 namespace Insis.Dummy.API.Controllers
 {
@@ -38,20 +37,5 @@ namespace Insis.Dummy.API.Controllers
 
             return peritos;
         }
-    }
-
-    public class Polo
-    {
-        public string Name { get; set; }
-    }
-
-    public class Perito
-    {
-        public string Name { get; set; }
-    }
-
-    public class Data1
-    {
-        public string Timeframe { get; set; }
     }
 }
