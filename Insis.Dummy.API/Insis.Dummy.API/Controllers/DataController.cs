@@ -23,7 +23,7 @@ namespace Insis.Dummy.API.Controllers
             var polos = new List<Polo>();
 
             for (int i = 0; i < 5; i++)
-                polos.Add(new Polo { Name = $"namePolo{i}" });
+                polos.Add(new Polo {_ID = i, Name = $"namePolo{i}", Text = Name });
 
             return polos;
         }
@@ -33,7 +33,7 @@ namespace Insis.Dummy.API.Controllers
             var peritos = new List<Perito>();
 
             for (int i = 0; i < 5; i++)
-                peritos.Add(new Perito { Name = $"namePerito{i}" });
+                peritos.Add(new Perito {_ID = i, Name = $"namePerito{i}", Text = Name });
 
             return peritos;
         }
@@ -43,7 +43,7 @@ namespace Insis.Dummy.API.Controllers
             var areaConhecimentoList = new List<AreaConhecimento>();
 
             for (int i = 0; i < 5; i++)
-                areaConhecimentoList.Add(new AreaConhecimento { Name = $"nameAreaConhecimento{i}" });
+                areaConhecimentoList.Add(new AreaConhecimento {_ID = i, Name = $"nameAreaConhecimento{i}", Text = Name });
 
             return areaConhecimentoList;
         }
