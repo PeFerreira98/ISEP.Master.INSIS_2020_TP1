@@ -21,7 +21,7 @@ namespace Insis.Dummy.API.Controllers
         [HttpGet("GetPolos")]
         public IEnumerable<Polo> GetPolos()
         {
-            List<Polo> polos = new List<Polo>();
+            var polos = new List<Polo>();
 
             for (int i = 0; i < 5; i++)
                 polos.Add(new Polo { Name = $"namePolo{i}" });

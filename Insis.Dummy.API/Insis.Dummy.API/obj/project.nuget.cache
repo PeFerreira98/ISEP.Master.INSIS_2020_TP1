@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "68LWBTKK5pbADBBms9FWovKbwwwgXuxI59Gc90fPnIbsQRe9XWUgy4D9/9K6Asvc2mLFVne+tJRFdP4AmAjoTg==",
+  "dgSpecHash": "tVkvaDZVMbFlkitlyr0rDMZVDNge9zxk068KpPJ8Gg8CJM5y91l2E0Jm8lkWBrPEEZuxDAzkW1ooeSFLyKJzzw==",
   "success": true,
-  "projectFilePath": "C:\\Source\\Insis.Dummy.API\\Insis.Dummy.API\\Insis.Dummy.API.csproj",
+  "projectFilePath": "C:\\Source\\insis-19-20-prj1\\Insis.Dummy.API\\Insis.Dummy.API\\Insis.Dummy.API.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
