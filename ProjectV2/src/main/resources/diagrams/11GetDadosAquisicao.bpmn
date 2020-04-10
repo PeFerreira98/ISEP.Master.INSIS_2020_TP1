@@ -19,21 +19,13 @@
           </activiti:field>
           <activiti:field name="script">
             <activiti:expression><![CDATA[var rest_out = execution.getVariable('rest_out');
-
 var rest_out_parsed = JSON.parse(rest_out);
-print("rest_out" + JSON.stringify(rest_out_parsed));
-
-var peritos_name_list = []
-
+var peritos_name_list = [];
 for (var i = 0; i < rest_out_parsed.length; i++) {
 	peritos_name_list.push(rest_out_parsed[i].name);
 }
-
 var peritos_name_list_parsed = JSON.stringify(peritos_name_list);
-print("peritos_name_list_parsed: " + peritos_name_list_parsed);
-
-execution.setVariable('peritos_list', peritos_name_list_parsed);
-print("peritos_list: " + peritos_list);]]></activiti:expression>
+execution.setVariable('peritos_list', peritos_name_list_parsed);]]></activiti:expression>
           </activiti:field>
         </activiti:executionListener>
       </extensionElements>
@@ -76,21 +68,13 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
           </activiti:field>
           <activiti:field name="script">
             <activiti:expression><![CDATA[var rest_out = execution.getVariable('getPolosResult');
-
 var rest_out_parsed = JSON.parse(rest_out);
-print("rest_out" + JSON.stringify(rest_out_parsed));
-
 var polos_name_list = [];
-
 for (var  i = 0; i < rest_out_parsed.length; i++) {
 	polos_name_list.push(rest_out_parsed[i].name);
 }
-
 var polos_name_list_parsed = JSON.stringify(polos_name_list);
-print("polos_name_list_parsed: " + polos_name_list_parsed);
-
-execution.setVariable('polos_list', polos_name_list_parsed);
-print("polos_list: " + polos_list);]]></activiti:expression>
+execution.setVariable('polos_list', polos_name_list_parsed);]]></activiti:expression>
           </activiti:field>
         </activiti:executionListener>
       </extensionElements>
