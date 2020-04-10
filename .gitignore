@@ -3,6 +3,9 @@
 [Tt]arget/
 [Dd]eployment/
 
+.vs/
+.vscode/
+
 #.classpath
 #.project
 
