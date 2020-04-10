@@ -1,7 +1,10 @@
+package form.type;
+
 import org.activiti.engine.form.AbstractFormType;
 
 @SuppressWarnings("unchecked")
-public class SimpleTableType extends AbstractFormType {
+public class SimpleTable extends AbstractFormType {
+	
     private static final long serialVersionUID = 1L;
 
     public static final String TYPE_NAME = "simpleTable";

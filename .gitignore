@@ -6,6 +6,12 @@
 .vs/
 .vscode/
 
+.idea/
+.settings/
+
+bin/
+target/
+
 #.classpath
 #.project
 
