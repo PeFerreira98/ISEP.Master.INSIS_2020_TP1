@@ -3,9 +3,31 @@
   <process id="propoeaquisicao1" name="1PropoeAquisicao" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
+    <extensionElements>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("ENDPROCESS RESULT2");
+var polosList = execution.getVariable('polos_list');
+var peritosList = execution.getVariable('peritos_list');
+var areaConhecimentoList = execution.getVariable('areaConhecimento_list');
+print("polos_list: " + polosList);
+print("peritos_list: " + peritosList);
+print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <callActivity id="callactivity1" name="1PropoeAquisicaoGetData" calledElement="getdadosaquisicao11"></callActivity>
+    <callActivity id="callactivity1" name="1PropoeAquisicaoGetData" calledElement="getdadosaquisicao11">
+      <extensionElements>
+        <activiti:out source="polos_list" target="polos_list"></activiti:out>
+        <activiti:out source="peritos_list" target="peritos_list"></activiti:out>
+        <activiti:out source="areaConhecimento_list" target="areaConhecimento_list"></activiti:out>
+      </extensionElements>
+    </callActivity>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <sequenceFlow id="flow2" sourceRef="callactivity1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
