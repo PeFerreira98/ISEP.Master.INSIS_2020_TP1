@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="final_report" name="Final Report" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <userTask id="usertask1" name="Mostrar todas as decisões" activiti:assignee="${decision_maker}">
+      <extensionElements>
+        <activiti:formProperty id="decision_message" name="Mensagem confirmacao" type="mlstring" expression="O processo ${action_decision} foi completado com sucesso." writable="false"></activiti:formProperty>
+        <activiti:formProperty id="cousine_decision_f" name="Decisão" type="string" variable="action_decision" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="cousine_decision_f" name="Cousine" type="string" variable="cousine_decision" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="location_f" name="Minhas coordenadas" type="string" variable="location" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="location_city_f" name="Minha cidade" type="string" variable="location_city" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="location_zip_f" name="Meu código postal" type="string" variable="location_zip" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="place_name_f" name="Establecimento escolhido" type="string" variable="place_name" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="place_address_f" name="Morada do establecimento" type="string" variable="place_address" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="place_gps_f" name="Coordenadas do establecimento" type="string" variable="place_gps" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="dish_decision_f" name="Prato escolhido" type="string" variable="dish_decision" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="dish_ingredients_f" name="Ingredientes do prato" type="mlstring" variable="dish_ingredients" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="dish_results_f" name="Pratos encomendados" type="string" variable="dish_results" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="transport_decision_f" name="Meio de transporte" type="string" variable="transport_decision" writable="false"></activiti:formProperty>
+        <activiti:formProperty id="encomenda_address_f" name="Edereço de encomenda" type="string" variable="encomenda_address" writable="false"></activiti:formProperty>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var dish_decision_var = execution.getVariable('dish_decision');
+var dish_ingredients_var = execution.getVariable('dish_ingredients');
+var dish_results_var = execution.getVariable('dish_results');
+var transport_decision_var = execution.getVariable('transport_decision');
+var encomenda_address_var = execution.getVariable('encomenda_address');
+
+if (dish_decision_var == null) {
+  dish_decision_var = "N/D"
+}
+if (dish_ingredients_var == null) {
+  dish_ingredients_var = "N/D"
+}
+if (dish_results_var == null) {
+  dish_results_var = "N/D"
+}
+if (transport_decision_var == null) {
+  transport_decision_var = "N/D"
+}
+if (encomenda_address_var == null) {
+  encomenda_address_var = "N/D"
+}
+
+print("---Confirmation---");
+print("dish_decision: "+dish_decision_var);
+print("dish_ingredients: "+dish_ingredients_var);
+print("dish_results: "+dish_results_var);
+print("transport_decision: "+transport_decision_var);
+print("encomenda_address: "+encomenda_address_var);
+print("---End of confirmation---");
+
+execution.setVariable('dish_decision', dish_decision_var);
+execution.setVariable('dish_ingredients', dish_ingredients_var);
+execution.setVariable('dish_results', dish_results_var);
+execution.setVariable('transport_decision', transport_decision_var);
+execution.setVariable('encomenda_address', encomenda_address_var);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
+    <serviceTask id="servicetask1" name="Guardar decisões numa folha de cálculo" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
+      <extensionElements>
+        <activiti:field name="serviceURL">
+          <activiti:string>http://localhost:8280/sheet/</activiti:string>
+        </activiti:field>
+        <activiti:field name="method">
+          <activiti:string>POST</activiti:string>
+        </activiti:field>
+        <activiti:field name="input">
+          <activiti:expression>${json_payload}</activiti:expression>
+        </activiti:field>
+        <activiti:field name="outputVariable">
+          <activiti:string>s_response</activiti:string>
+        </activiti:field>
+        <activiti:field name="headers">
+          <activiti:string>{"Content-Type":"application/json"}</activiti:string>
+        </activiti:field>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[var json_payload_var = {};
+var my_array = [];
+
+var action_decision = execution.getVariable('action_decision');
+var cousine_decision = execution.getVariable('cousine_decision');
+var location = execution.getVariable('location');
+var location_city = execution.getVariable('location_city');
+var location_zip = execution.getVariable('location_zip');
+var place_name = execution.getVariable('place_name');
+var place_address = execution.getVariable('place_address');
+var place_gps = execution.getVariable('place_gps');
+var dish_decision = execution.getVariable('dish_decision');
+var dish_ingredients = execution.getVariable('dish_ingredients');
+var dish_results = execution.getVariable('dish_results');
+var transport_decision = execution.getVariable('transport_decision');
+var encomenda_address = execution.getVariable('encomenda_address');
+
+// Remove new lines to avoid errors
+dish_ingredients = dish_ingredients.replace(/[\n\r]+/g, ' ');;
+dish_results = dish_results.replace(/[\n\r]+/g, ' ');;
+
+my_array.push(action_decision, cousine_decision, location, location_city, location_zip, place_name, place_address, place_gps, dish_decision, dish_ingredients, dish_results, transport_decision, encomenda_address);
+
+my_array = [my_array];
+json_payload_var.values = my_array;
+json_payload_var = JSON.stringify(json_payload_var);
+print("Setting the payload: " + json_payload_var);
+execution.setVariable('json_payload', json_payload_var);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("Response to Sheets was: "+s_response);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="servicetask1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="servicetask1" targetRef="terminateendevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_final_report">
+    <bpmndi:BPMNPlane bpmnElement="final_report" id="BPMNPlane_final_report">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="170.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="720.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="61.0" width="105.0" x="341.0" y="127.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="67.0" width="111.0" x="500.0" y="124.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="205.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="341.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="446.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="611.0" y="157.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="157.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

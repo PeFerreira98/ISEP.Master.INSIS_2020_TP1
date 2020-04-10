@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>2019-20-insis-example-complex-types</name>
+	<comment></comment>
+	<projects>
+		<project>2019-20-insis-example-complex-types-support</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.activiti.designer.nature</nature>
+	</natures>
+</projectDescription>
