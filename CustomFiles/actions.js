@@ -69,7 +69,7 @@ $(document).ready(function () {
 
             var fileType = getFileType();
             if (fileType) {
-                arr.push({name: 'type', value: fileType})
+                arr.push({ name: 'type', value: fileType })
             }
         },
 
@@ -84,15 +84,15 @@ $(document).ready(function () {
         }
     });
 
-    $("#collapseList").on("hide.bs.collapse", function(){
+    $("#collapseList").on("hide.bs.collapse", function () {
         var hiddencnt = document.getElementById("hiddenCmtCount").value;
-        $("#collapsebtn").html('<span class="glyphicon glyphicon-collapse-down"></span><span> ' + hiddencnt + 
-                                    ' Hidden Comments </span><span class="text-danger" style="font-size: 10px;"> (Click to view) </span>');
+        $("#collapsebtn").html('<span class="glyphicon glyphicon-collapse-down"></span><span> ' + hiddencnt +
+            ' Hidden Comments </span><span class="text-danger" style="font-size: 10px;"> (Click to view) </span>');
     });
 
-    $("#collapseList").on("show.bs.collapse", function(){
-        $("#collapsebtn").html('<span class="glyphicon glyphicon-collapse-up"></span> <span> No hidden Comments </span>' + 
-                                    '<span class="text-danger" style="font-size: 10px;"> (Click to collapse) </span>');
+    $("#collapseList").on("show.bs.collapse", function () {
+        $("#collapsebtn").html('<span class="glyphicon glyphicon-collapse-up"></span> <span> No hidden Comments </span>' +
+            '<span class="text-danger" style="font-size: 10px;"> (Click to collapse) </span>');
     });
 
     /*var pagination = document.getElementById("pagCount").value;
@@ -156,35 +156,45 @@ function completeTask(data, id) {
                             if (vData[j].type === "string") {
 
                                 variables.push({
-                                                "name" : data[i].name,
-                                                "value" : data[i].value,
-                                                "type" : "string"
-                                            });
+                                    "name": data[i].name,
+                                    "value": data[i].value,
+                                    "type": "string"
+                                });
                             } else if (vData[j].type === "enum") {
                                 variables.push({
-                                                "name" : data[i].name,
-                                                "value" : data[i].value,
-                                            });
+                                    "name": data[i].name,
+                                    "value": data[i].value,
+                                });
                             } else if (vData[j].type === "date") {
                                 var startDateTemp = new Date(data[i].value);
                                 variables.push({
-                                                "name" : data[i].name,
-                                                "value": startDateTemp.toISOString,
-                                                "type" : "date"
-                                            });
+                                    "name": data[i].name,
+                                    "value": startDateTemp.toISOString,
+                                    "type": "date"
+                                });
+                            } else if (vData[j].type === "simpleSelect") {
+                                variables.push({
+                                    "name": data[i].name,
+                                    "value": data[i].value
+                                });
+                            }  else if (vData[j].type === "simpleTable") {
+                                variables.push({
+                                    "name": data[i].name,
+                                    "value": data[i].value
+                                });
                             } else {
                                 try {
                                     //if length is 0, then that input is not a mandatory input and user haven't enter anything
                                     if (data[i].value.length > 0) {
                                         variables.push({
-                                                "name": data[i].name,
-                                                "value": eval(data[i].value),
-                                                "type" : vData[j].type
-                                            });
+                                            "name": data[i].name,
+                                            "value": eval(data[i].value),
+                                            "type": vData[j].type
+                                        });
                                     }
-                                } catch  (error) {
+                                } catch (error) {
                                     document.getElementById("commonErrorSection").hidden = false;
-                                    document.getElementById("errorMsg").innerHTML = "Enter valid input for \"" + vData[j].type +"\" input";
+                                    document.getElementById("errorMsg").innerHTML = "Enter valid input for \"" + vData[j].type + "\" input";
                                     $(document.body).scrollTop($('#commonErrorSection').offset().top);
                                     emptyVar = false;
                                     document.getElementById("loadingCompleteButton").hidden = true;
@@ -286,7 +296,7 @@ function reassign(username, id) {
 function claim(username, id) {
     var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/tasks/" + id;
     var body = {
-        "action" : "claim",
+        "action": "claim",
         "assignee": username
     };
 
@@ -431,33 +441,33 @@ function startProcessWithData(data, id) {
 
                             if (vData[j].type === "string") {
                                 variables.push({
-                                                "name" : data[i].name,
-                                                "value" : data[i].value,
-                                                "type" : "string"
-                                            });
+                                    "name": data[i].name,
+                                    "value": data[i].value,
+                                    "type": "string"
+                                });
                             } else if (vData[j].type === "enum") {
                                 variables.push({
-                                                "name" : data[i].name,
-                                                "value" : data[i].value,
-                                            });
+                                    "name": data[i].name,
+                                    "value": data[i].value,
+                                });
                             } else if (vData[j].type === "date") {
                                 var startDateTemp = new Date(data[i].value);
                                 variables.push({
-                                                "name" : data[i].name,
-                                                "value": startDateTemp.toISOString(),
-                                                "type" : "date"
-                                            });
+                                    "name": data[i].name,
+                                    "value": startDateTemp.toISOString(),
+                                    "type": "date"
+                                });
                             } else {
                                 try {
                                     //if length is 0, then that input is not a mandatory input and user haven't enter anything
                                     if (data[i].value.length > 0) {
                                         variables.push({
-                                                        "name": data[i].name,
-                                                        "value": eval(data[i].value),
-                                                        "type" : vData[j].type
-                                                    });
+                                            "name": data[i].name,
+                                            "value": eval(data[i].value),
+                                            "type": vData[j].type
+                                        });
                                     }
-                                } catch  (error) {
+                                } catch (error) {
                                     document.getElementById("commonErrorSection").hidden = false;
                                     document.getElementById("errorMsg").innerHTML = "Enter valid input for \"" + vData[j].name + "\" input";
                                     $(document.body).scrollTop($('#commonErrorSection').offset().top);
@@ -627,7 +637,7 @@ function setDateTimePicker(dateElement, parentElement) {
     });
 }
 
-function epochToFormattedTime (epochTime) {
+function epochToFormattedTime(epochTime) {
     var time = new Date(epochTime);
     return time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.toLocaleTimeString();
 }
@@ -645,7 +655,7 @@ function selectProcessForChart() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
             function drawChart(data) {
@@ -684,7 +694,7 @@ function selectUserForPerformance(userName) {
         url: url,
         success: function (data) {
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
             function drawChart(data) {
@@ -726,15 +736,15 @@ function selectUserForPerformance(userName) {
                 var chartHeight = chartAreaHeight + 30;
 
                 var options = {
-                    vAxis: {title: vTitle, titleTextStyle: {color: 'grey'}, logScale: logScaleEnabled},
-                    hAxis: {title: 'Months', titleTextStyle: {color: 'grey'}},
+                    vAxis: { title: vTitle, titleTextStyle: { color: 'grey' }, logScale: logScaleEnabled },
+                    hAxis: { title: 'Months', titleTextStyle: { color: 'grey' } },
                     colors: ['#be2d28', '#afaeae'],
                     height: chartHeight,
-                    bar: {groupWidth: "70%"},
+                    bar: { groupWidth: "70%" },
                     chartArea: {
                         width: '75%'
                     },
-                    legend: {position: "top"}
+                    legend: { position: "top" }
 
                 };
                 var chart = new google.visualization.ColumnChart(document.getElementById('taskOfUserVariation'));
@@ -757,7 +767,7 @@ function selectProcessForAvgTimeDuration() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
             if (array.length == 0) {
@@ -777,15 +787,15 @@ function selectProcessForAvgTimeDuration() {
                     var options = {
                         vAxis: {
                             title: 'Process Name',
-                            titleTextStyle: {color: 'grey'}
+                            titleTextStyle: { color: 'grey' }
                         },
                         hAxis: {
                             title: 'Average Time Time Duration in Minutes',
-                            titleTextStyle: {color: 'grey'}
+                            titleTextStyle: { color: 'grey' }
                         },
                         height: ((data.getNumberOfRows() + 2) * 100) + 200,
-                        chartArea: {top: 10, height: chartAreaHeight},
-                        bar: {groupWidth: "30%"},
+                        chartArea: { top: 10, height: chartAreaHeight },
+                        bar: { groupWidth: "30%" },
                         colors: ['#be2d28']
                     };
 
@@ -810,7 +820,7 @@ function selectProcessForInstanceCount() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
 
@@ -842,12 +852,12 @@ function selectProcessForInstanceCount() {
                 }
                 var chartAreaHeight = ((data.getNumberOfRows() + 2) * 100);
                 var options = {
-                    vAxis: {title: 'Process Name', titleTextStyle: {color: 'grey'}},
-                    hAxis: {title: hTitle, titleTextStyle: {color: 'grey'}, logScale: logScaleEnabled},
+                    vAxis: { title: 'Process Name', titleTextStyle: { color: 'grey' } },
+                    hAxis: { title: hTitle, titleTextStyle: { color: 'grey' }, logScale: logScaleEnabled },
                     colors: ['#be2d28'],
                     height: ((data.getNumberOfRows() + 2) * 100) + 200,
-                    chartArea: {top: 10, height: chartAreaHeight},
-                    bar: {groupWidth: "35%"}
+                    chartArea: { top: 10, height: chartAreaHeight },
+                    bar: { groupWidth: "35%" }
                 };
 
                 var chart = new google.visualization.BarChart(document.getElementById('barChart'));
@@ -868,7 +878,7 @@ function userVsTasksCompleted() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
             if (array.length == 0) {
@@ -909,14 +919,14 @@ function userVsTasksCompleted() {
                     var options = {
                         hAxis: {
                             title: hTitle,
-                            titleTextStyle: {color: 'grey'},
+                            titleTextStyle: { color: 'grey' },
                             logScale: logScaleEnabled
                         },
-                        vAxis: {title: 'User', titleTextStyle: {color: 'grey'}},
+                        vAxis: { title: 'User', titleTextStyle: { color: 'grey' } },
                         colors: ['#be2d28'],
                         height: ((data.getNumberOfRows() + 2) * 100) + 200,
-                        chartArea: {top: 10, height: chartAreaHeight},
-                        bar: {groupWidth: "35%"}
+                        chartArea: { top: 10, height: chartAreaHeight },
+                        bar: { groupWidth: "35%" }
                     };
 
                     var chart = new google.visualization.BarChart(document.getElementById('colChartUserVsTasks'));
@@ -939,7 +949,7 @@ function avgTimeForUserForTasks() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
             if (array.length == 0) {
@@ -978,16 +988,16 @@ function avgTimeForUserForTasks() {
                     var options = {
                         hAxis: {
                             title: hTitle,
-                            titleTextStyle: {color: 'grey'}
+                            titleTextStyle: { color: 'grey' }
                         },
                         vAxis: {
                             title: 'Users',
-                            titleTextStyle: {color: 'grey'}
+                            titleTextStyle: { color: 'grey' }
                         },
                         colors: ['#be2d28'],
                         height: ((data.getNumberOfRows() + 2) * 100) + 200,
-                        chartArea: {top: 10, height: chartAreaHeight},
-                        bar: {groupWidth: "35%"}
+                        chartArea: { top: 10, height: chartAreaHeight },
+                        bar: { groupWidth: "35%" }
                     };
 
                     var chart = new google.visualization.BarChart(document.getElementById('userVsAvgTaskDuration'));
@@ -1010,7 +1020,7 @@ function taskVariationOverTime() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
 
@@ -1052,15 +1062,15 @@ function taskVariationOverTime() {
                 var chartHeight = chartAreaHeight + 32;
 
                 var options = {
-                    vAxis: {title: vTitle, titleTextStyle: {color: 'grey'}, logScale: logScaleEnabled},
-                    hAxis: {title: 'Months', titleTextStyle: {color: 'grey'}},
+                    vAxis: { title: vTitle, titleTextStyle: { color: 'grey' }, logScale: logScaleEnabled },
+                    hAxis: { title: 'Months', titleTextStyle: { color: 'grey' } },
                     colors: ['#be2d28', '#afaeae'],
                     height: chartHeight,
-                    bar: {groupWidth: "70%"},
+                    bar: { groupWidth: "70%" },
                     chartArea: {
                         width: '75%'
                     },
-                    legend: {position: "top"},
+                    legend: { position: "top" },
                     format: 'decimal'
                 };
 
@@ -1084,7 +1094,7 @@ function processVariationOverTime() {
         success: function (data) {
 
             var array = eval('(' + data + ')');
-            google.load("visualization", "1", {packages: ["corechart"]});
+            google.load("visualization", "1", { packages: ["corechart"] });
             google.setOnLoadCallback(drawChart(array));
 
             function drawChart(data) {
@@ -1124,15 +1134,15 @@ function processVariationOverTime() {
                 var chartHeight = chartAreaHeight + 32;
 
                 var options = {
-                    vAxis: {title: vTitle, titleTextStyle: {color: 'grey'}, logScale: logScaleEnabled},
-                    hAxis: {title: 'Months', titleTextStyle: {color: 'grey'}},
+                    vAxis: { title: vTitle, titleTextStyle: { color: 'grey' }, logScale: logScaleEnabled },
+                    hAxis: { title: 'Months', titleTextStyle: { color: 'grey' } },
                     colors: ['#be2d28', '#afaeae'],
                     height: chartHeight,
-                    bar: {groupWidth: "70%"},
+                    bar: { groupWidth: "70%" },
                     chartArea: {
                         width: '75%'
                     },
-                    legend: {position: "top"},
+                    legend: { position: "top" },
                     format: 'decimal'
                 };
 
@@ -1191,7 +1201,7 @@ function getUserTasksOfCompletedProcessInstances(id) {
                 var startTime = epochToFormattedTime(completedTaskInstances.data[k].startTime);
                 var endTime = epochToFormattedTime(completedTaskInstances.data[k].endTime);
                 var assignee = completedTaskInstances.data[k].assignee;
-                var duration = completedTaskInstances.data[k].durationInMillis/1000;
+                var duration = completedTaskInstances.data[k].durationInMillis / 1000;
 
                 DIV = DIV + "<tr><td>" + state + "</td><td style='word-wrap: break-word'>" + taskDefKey + "</td><td style='word-wrap: break-word'>" + taskName + "</td><td>" + startTime + "</td><td>" + endTime + "</td><td>" + assignee + "</td><td>" + duration + "</td></tr>";
 
@@ -1238,7 +1248,7 @@ function getVariablesOfCompletedProcessInstances(id) {
 }
 
 //convert given epochTime to a readable form
-function epochToFormattedTime (epochTime) {
+function epochToFormattedTime(epochTime) {
     if (epochTime != null) {
         var time = new Date(epochTime);
         return time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' + time.toLocaleTimeString();
@@ -1319,7 +1329,7 @@ function getCalledProcessInstancesOfCompleted(id) {
                         var processDefinitionId = calledPInfo.processDefinitionId;
                         var startTime = epochToFormattedTime(calledPInfo.startTime);
                         var endTime = epochToFormattedTime(calledPInfo.endTime);
-                        var duration = calledPInfo.durationInMillis/1000;
+                        var duration = calledPInfo.durationInMillis / 1000;
 
                         DIV = DIV + "<tr><td>" + id + "</td><td style='word-wrap: break-word'>" + processDefinitionId + "</td><td>" + startTime + "</td><td>" + endTime + "</td><td>" + duration + "</td></tr>";
                         DIV = DIV + "</tbody></table></div>"
@@ -1485,7 +1495,7 @@ function getUserTasksOfRunningProcessInstances(pid, id) {
                                 var startTime = epochToFormattedTime(taskList2.data[j].startTime);
                                 var endTime = epochToFormattedTime(taskList2.data[j].endTime);
                                 var assignee = taskList2.data[j].assignee;
-                                var duration = taskList2.data[j].durationInMillis/1000;
+                                var duration = taskList2.data[j].durationInMillis / 1000;
 
                                 if (taskDefKey == activityId && endTime !== null) {
                                     var state = "Completed";
@@ -1615,7 +1625,7 @@ function filterResults(id) {
 
 
 
-function addNewSubstitute (assignee, subName, startDate, endDate) {
+function addNewSubstitute(assignee, subName, startDate, endDate) {
 
     try {
         if (assignee.length == 0) {
@@ -1641,7 +1651,7 @@ function addNewSubstitute (assignee, subName, startDate, endDate) {
             var endTimeStrArr = endDate.split(' ');
             var endDateTimeStr = endTimeStrArr[0] + ' ' + endTimeStrArr[1] + ' ' + endTimeStrArr[2];
             var endTime = new Date(endDateTimeStr);
-            
+
             try {
                 endTimeStr = endTime.toISOString()
             } catch (error) {
@@ -1650,12 +1660,12 @@ function addNewSubstitute (assignee, subName, startDate, endDate) {
         }
 
         //json request
-        var addSubRequest  =  {
-                                   "assignee": assignee,
-                                   "substitute" : subName,
-                                   "startTime" : startTimeStr,
-                                   "endTime" : endTimeStr
-                                };
+        var addSubRequest = {
+            "assignee": assignee,
+            "substitute": subName,
+            "startTime": startTimeStr,
+            "endTime": endTimeStr
+        };
 
         var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes";
 
@@ -1671,7 +1681,7 @@ function addNewSubstitute (assignee, subName, startDate, endDate) {
                 if (xhr.responseText.length > 0) {
                     var errorJson = eval("(" + xhr.responseText + ")");
                     if (errorJson != null && errorJson.errorMessage != undefined) {
-                        $('#addSubErrMsg').html("Error "+ errorJson.statusCode+ ": " + errorJson.errorMessage);
+                        $('#addSubErrMsg').html("Error " + errorJson.statusCode + ": " + errorJson.errorMessage);
                     } else {
                         $('#addSubErrMsg').html("Error occurred while adding substitute. Please try again");
                     }
@@ -1680,11 +1690,11 @@ function addNewSubstitute (assignee, subName, startDate, endDate) {
                 } else {
                     $('#addSubErrMsg').html("Error occurred while adding substitute user. Please try again");
                 }
-                
+
                 $('#addSubErrorMessageArea').show();
                 //set callback to remove error message when hiding the modal
                 $('#addSubstituteModal').on('hide.bs.modal', function (e) {
-                        $('#addSubErrorMessageArea').hide();
+                    $('#addSubErrorMessageArea').hide();
                 });
 
             }
@@ -1694,12 +1704,12 @@ function addNewSubstitute (assignee, subName, startDate, endDate) {
         $('#addSubErrorMessageArea').show();
         //set callback to remove error message when hiding the modal
         $('#updateSubstituteModal').on('hide.bs.modal', function (e) {
-                $('#addSubErrorMessageArea').hide();
+            $('#addSubErrorMessageArea').hide();
         });
     }
 }
 
-function updateSubstitute (assignee, subName, startDate, endDate) {
+function updateSubstitute(assignee, subName, startDate, endDate) {
     try {
 
         if (assignee.length == 0) {
@@ -1734,14 +1744,14 @@ function updateSubstitute (assignee, subName, startDate, endDate) {
         }
 
         //json request
-        var updateSubRequest  =  {
-                                   "assignee": assignee,
-                                   "substitute" : subName,
-                                   "startTime" : startTimeStr,
-                                   "endTime" : endTimeStr
-                                };
+        var updateSubRequest = {
+            "assignee": assignee,
+            "substitute": subName,
+            "startTime": startTimeStr,
+            "endTime": endTimeStr
+        };
 
-        var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes/"+ assignee;
+        var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes/" + assignee;
 
         $.ajax({
             type: 'PUT',
@@ -1755,7 +1765,7 @@ function updateSubstitute (assignee, subName, startDate, endDate) {
                 if (xhr.responseText.length > 0) {
                     var errorJson = eval("(" + xhr.responseText + ")");
                     if (errorJson != null && errorJson.errorMessage != undefined) {
-                        $('#updateSubErrMsg').html("Error "+ errorJson.statusCode+ ": " + errorJson.errorMessage);
+                        $('#updateSubErrMsg').html("Error " + errorJson.statusCode + ": " + errorJson.errorMessage);
                     } else {
                         $('#updateSubErrMsg').html("Error occurred while updating substitute. Please try again");
                     }
@@ -1764,11 +1774,11 @@ function updateSubstitute (assignee, subName, startDate, endDate) {
                 } else {
                     $('#updateSubErrMsg').html("Error occurred while adding substitute user. Please try again");
                 }
-                
+
                 $('#updateSubErrorMessageArea').show();
                 //set callback to remove error message when hiding the modal
                 $('#updateSubstituteModal').on('hide.bs.modal', function (e) {
-                        $('#updateSubErrorMessageArea').hide();
+                    $('#updateSubErrorMessageArea').hide();
                 });
             }
         });
@@ -1778,7 +1788,7 @@ function updateSubstitute (assignee, subName, startDate, endDate) {
         $('#updateSubErrorMessageArea').show();
         //set callback to remove error message when hiding the modal
         $('#updateSubstituteModal').on('hide.bs.modal', function (e) {
-                $('#updateSubErrorMessageArea').hide();
+            $('#updateSubErrorMessageArea').hide();
         });
     }
 }
@@ -1796,9 +1806,9 @@ function populateupdateSubstituteModal(assignee, substitute, startTime, endTime)
 
 function deactivateSub(userName) {
     //json request
-    var disableSubRequest  = {"action":true};
+    var disableSubRequest = { "action": true };
 
-    var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes/"+ userName+"/disable";
+    var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes/" + userName + "/disable";
 
     $.ajax({
         type: 'POST',
@@ -1822,9 +1832,9 @@ function deactivateSub(userName) {
 
 function activateSub(userName) {
     //json request
-    var disableSubRequest  = {"action":false};
+    var disableSubRequest = { "action": false };
 
-    var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes/"+ userName+"/disable";
+    var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/substitutes/" + userName + "/disable";
 
     $.ajax({
         type: 'POST',
@@ -1848,7 +1858,7 @@ function activateSub(userName) {
 /**
 *  Function to add more variable names and values to filter for instances
 */
-function addVariable(){
+function addVariable() {
     var vNames = document.getElementsByName("variableName");
     if (vNames[vNames.length - 1].value !== "" && vNames[vNames.length - 1].value !== undefined) {
         var vRow = document.getElementById("variablesRow");
@@ -1893,11 +1903,11 @@ function resetForm() {
  */
 function addComment(id) {
     var text = document.getElementById("addCommentTextArea").value;
-    var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/tasks/" + id +"/comments";
+    var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/tasks/" + id + "/comments";
     if (text !== "" && text !== undefined) {
         var body = {
             "message": text,
-            "saveProcessInstanceId" : true
+            "saveProcessInstanceId": true
         };
 
         $.ajax({
@@ -1906,13 +1916,13 @@ function addComment(id) {
             url: httpUrl + url,
             data: JSON.stringify(body),
             success: function (data) {
-                document.getElementById("addCommentTextArea").value='';
+                document.getElementById("addCommentTextArea").value = '';
                 var listData = JSON.parse(data);
                 var commentID = listData.id;
                 var commentLiID = "comment_" + commentID;
                 var commentViewList = '';
                 var list = document.getElementById("commentList");
-                commentViewList = commentViewList + '<li class="list-group-item" id="'+commentLiID +'">\
+                commentViewList = commentViewList + '<li class="list-group-item" id="' + commentLiID + '">\
                                           <div> Added a comment on - \
                                           <time>' + new Date(listData.time) + '</time>\
                                           <a href="#commentTab" onclick="deleteComment(' + id + ',' + commentID + ')">\
@@ -1921,7 +1931,7 @@ function addComment(id) {
                                           </div>\
                                           <div>' + listData.message + '</div>\
                                           </li>';
-                list.insertAdjacentHTML('beforeEnd',commentViewList);
+                list.insertAdjacentHTML('beforeEnd', commentViewList);
             },
             error: function (xhr, status, error) {
                 document.getElementById("commonErrorSection").hidden = false;
@@ -1940,8 +1950,8 @@ function addComment(id) {
  */
 function deleteComment(id, commentId) {
     $('#deleteConfirmModal').modal('show');
-    document.getElementById('confirmOk').onclick = function() {
-        var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/tasks/" + id +"/comments/" +commentId;
+    document.getElementById('confirmOk').onclick = function () {
+        var url = "/" + CONTEXT + "/send?req=/bpmn/runtime/tasks/" + id + "/comments/" + commentId;
         $.ajax({
             type: 'DELETE',
             url: httpUrl + url,
@@ -1967,7 +1977,7 @@ function deleteComment(id, commentId) {
         });
         $('#deleteConfirmModal').modal('hide');
     }
-    document.getElementById('confirmCancel').onclick = function() {
+    document.getElementById('confirmCancel').onclick = function () {
         $('#deleteConfirmModal').modal('hide');
     }
 }
@@ -1978,9 +1988,9 @@ function deleteComment(id, commentId) {
  * @param value content to encode
  * @returns {*|{content, fd}|jQuery}
  */
-function htmlEncode(value){
-  //create a in-memory div, set it's inner text(which jQuery automatically encodes), then extract encoded contents
-  return $('<div/>').text(value).html().replace(/"/g, "&quot;").replace(/'/g, '&#x27;').replace(/\//g, "&#x2F;");
+function htmlEncode(value) {
+    //create a in-memory div, set it's inner text(which jQuery automatically encodes), then extract encoded contents
+    return $('<div/>').text(value).html().replace(/"/g, "&quot;").replace(/'/g, '&#x27;').replace(/\//g, "&#x2F;");
 }
 
 
