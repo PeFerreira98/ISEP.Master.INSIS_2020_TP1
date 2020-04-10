@@ -26,12 +26,14 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
         <activiti:out source="polos_list" target="polos_list"></activiti:out>
         <activiti:out source="peritos_list" target="peritos_list"></activiti:out>
         <activiti:out source="areaConhecimento_list" target="areaConhecimento_list"></activiti:out>
+        <activiti:out source="getAreaConhecimentoResult" target="getAreaConhecimentoResult"></activiti:out>
       </extensionElements>
     </callActivity>
     <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <userTask id="usertask1" name="PropoeAquisicaoForm" activiti:assignee="admin">
       <extensionElements>
         <activiti:formProperty id="tituloid1" name="Titulo" type="string" default="Titulo1" required="true"></activiti:formProperty>
+        <activiti:formProperty id="cenas1" name="Cenas" type="simpleSelect" variable="getAreaConhecimentoResult" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow4" sourceRef="callactivity1" targetRef="usertask1"></sequenceFlow>
