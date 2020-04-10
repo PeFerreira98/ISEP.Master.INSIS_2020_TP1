@@ -20,7 +20,7 @@ namespace Insis.Dummy.API.Models
         public string Name { get; set; }
     }
 
-    public class KnowledgeArea
+    public class AreaConhecimento
     {
         public string Name { get; set; }
     }

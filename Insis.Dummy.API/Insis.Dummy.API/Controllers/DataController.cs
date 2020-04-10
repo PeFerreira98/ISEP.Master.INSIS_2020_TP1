@@ -38,14 +38,14 @@ namespace Insis.Dummy.API.Controllers
             return peritos;
         }
 
-        [HttpGet("GetKnowledgeArea")]
-        public IEnumerable<KnowledgeArea> GetKnowledgeArea() {
-            var knowledgeAreas = new List<KnowledgeArea>();
+        [HttpGet("GetAreasConhecimento")]
+        public IEnumerable<AreaConhecimento> GetAreasConhecimento() {
+            var areaConhecimentoList = new List<AreaConhecimento>();
 
             for (int i = 0; i < 5; i++)
-                knowledgeAreas.Add(new KnowledgeArea { Name = $"nameKnowledgeAreas{i}" });
+                areaConhecimentoList.Add(new AreaConhecimento { Name = $"nameAreaConhecimento{i}" });
 
-            return knowledgeAreas;
+            return areaConhecimentoList;
         }
     }
 }
