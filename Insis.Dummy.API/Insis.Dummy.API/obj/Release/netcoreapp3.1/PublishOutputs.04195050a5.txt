@@ -1,7 +1,0 @@
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\Insis.Dummy.API.exe
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\appsettings.Development.json
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\appsettings.json
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\Insis.Dummy.API.dll
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\Insis.Dummy.API.deps.json
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\Insis.Dummy.API.runtimeconfig.json
-C:\Source\Insis.Dummy.API\Insis.Dummy.API\obj\Release\netcoreapp3.1\PubTmp\Out\Insis.Dummy.API.pdb
