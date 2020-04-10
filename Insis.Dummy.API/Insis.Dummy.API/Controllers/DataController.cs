@@ -37,5 +37,15 @@ namespace Insis.Dummy.API.Controllers
 
             return peritos;
         }
+
+        [HttpGet("GetKnowledgeArea")]
+        public IEnumerable<KnowledgeArea> GetKnowledgeArea() {
+            var knowledgeAreas = new List<KnowledgeArea>();
+
+            for (int i = 0; i < 5; i++)
+                knowledgeAreas.Add(new KnowledgeArea { Name = $"nameKnowledgeAreas{i}" });
+
+            return knowledgeAreas;
+        }
     }
 }

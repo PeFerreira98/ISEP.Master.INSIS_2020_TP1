@@ -20,4 +20,9 @@ namespace Insis.Dummy.API.Models
         public string Name { get; set; }
     }
 
+    public class KnowledgeArea
+    {
+        public string Name { get; set; }
+    }
+
 }
