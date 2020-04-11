@@ -9,10 +9,10 @@
             <activiti:string><![CDATA[javascript]]></activiti:string>
           </activiti:field>
           <activiti:field name="script">
-            <activiti:expression><![CDATA[print("PropoeAquisicao ENDPROCESS RESULT");
+            <activiti:expression><![CDATA[print("1PropoeAquisicao ENDPROCESS RESULT");
 print("polos_list: " + getPolosResult);
 print("peritos_list: " + getPeritosResult);
-print("areaConhecimento_list: " + getAreaConhecimentoResult);
+print("areaConhecimento_list: " + getAreasConhecimentoResult);
 print("users: " + registeredUsers);
 print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
           </activiti:field>
@@ -20,30 +20,27 @@ print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
       </extensionElements>
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <callActivity id="callactivity1" name="1PropoeAquisicaoGetData" calledElement="getdadosaquisicao11">
+    <callActivity id="callactivity1" name="11GetDadosAquisicao" calledElement="getdadosaquisicao11">
       <extensionElements>
-        <activiti:out source="polos_list" target="polos_list"></activiti:out>
-        <activiti:out source="peritos_list" target="peritos_list"></activiti:out>
-        <activiti:out source="areaConhecimento_list" target="areaConhecimento_list"></activiti:out>
-        <activiti:out source="getAreaConhecimentoResult" target="getAreaConhecimentoResult"></activiti:out>
+        <activiti:out source="getAreasConhecimentoResult" target="getAreasConhecimentoResult"></activiti:out>
         <activiti:out source="getPolosResult" target="getPolosResult"></activiti:out>
-        <activiti:out source="rest_out" target="getPeritosResult"></activiti:out>
+        <activiti:out source="getPeritosResult" target="getPeritosResult"></activiti:out>
+        <activiti:out source="registeredUsers" target="registeredUsers"></activiti:out>
+        <activiti:out source="registeredUsersPeritos" target="registeredUsersPeritos"></activiti:out>
       </extensionElements>
     </callActivity>
     <userTask id="usertask1" name="PropoeAquisicaoForm" activiti:assignee="proponente">
       <extensionElements>
         <activiti:formProperty id="tituloid1" name="Titulo" type="string" default="Titulo1" required="true"></activiti:formProperty>
-        <activiti:formProperty id="areasconhecimento1" name="Areas de Conhecimento" type="simpleSelect" variable="getAreaConhecimentoResult" writable="false" required="true"></activiti:formProperty>
+        <activiti:formProperty id="areasconhecimento1" name="Areas de Conhecimento" type="simpleSelect" variable="getAreasConhecimentoResult" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="anopublicacao1" name="Ano de Publicacao" type="string" default="2020" required="true"></activiti:formProperty>
         <activiti:formProperty id="polo1" name="Polo de Localizacao" type="simpleSelect" variable="getPolosResult"></activiti:formProperty>
         <activiti:formProperty id="peritos1" name="Peritos" type="simpleTable" variable="getPeritosResult" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
-    <serviceTask id="servicetask1" name="Retrieve users" activiti:class="form.util.FindRegisteredUsers"></serviceTask>
     <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <sequenceFlow id="flow4" sourceRef="callactivity1" targetRef="usertask1"></sequenceFlow>
-    <sequenceFlow id="flow5" sourceRef="usertask1" targetRef="servicetask1"></sequenceFlow>
-    <sequenceFlow id="flow6" sourceRef="servicetask1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_propoeaquisicao1">
     <bpmndi:BPMNPlane bpmnElement="propoeaquisicao1" id="BPMNPlane_propoeaquisicao1">
@@ -51,16 +48,13 @@ print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
         <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="64.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="840.0" y="64.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="650.0" y="64.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
         <omgdc:Bounds height="55.0" width="161.0" x="130.0" y="54.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
         <omgdc:Bounds height="55.0" width="171.0" x="370.0" y="54.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="661.0" y="54.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
         <omgdi:waypoint x="65.0" y="81.0"></omgdi:waypoint>
@@ -72,11 +66,7 @@ print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="541.0" y="81.0"></omgdi:waypoint>
-        <omgdi:waypoint x="661.0" y="81.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="766.0" y="81.0"></omgdi:waypoint>
-        <omgdi:waypoint x="840.0" y="81.0"></omgdi:waypoint>
+        <omgdi:waypoint x="650.0" y="81.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

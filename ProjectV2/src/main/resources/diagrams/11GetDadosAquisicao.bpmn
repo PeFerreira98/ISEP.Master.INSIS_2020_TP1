@@ -2,6 +2,24 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="getdadosaquisicao11" name="11GetDadosAquisicao" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <extensionElements>
+        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
+          <activiti:field name="language">
+            <activiti:string><![CDATA[javascript]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:expression><![CDATA[print("11GetDadosAquisicao_ENDPROCESS_RESULT");
+print("polos_list: " + getPolosResult);
+print("peritos_list: " + getPeritosResult);
+print("areaConhecimento_list: " + getAreasConhecimentoResult);
+print("users: " + registeredUsers);
+print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
     <serviceTask id="servicetask1" name="GetPeritos" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
       <extensionElements>
         <activiti:field name="serviceURL">
@@ -11,46 +29,10 @@
           <activiti:string>GET</activiti:string>
         </activiti:field>
         <activiti:field name="outputVariable">
-          <activiti:string>rest_out</activiti:string>
+          <activiti:string>getPeritosResult</activiti:string>
         </activiti:field>
-        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
-          <activiti:field name="language">
-            <activiti:string><![CDATA[javascript]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="script">
-            <activiti:expression><![CDATA[var rest_out = execution.getVariable('rest_out');
-var rest_out_parsed = JSON.parse(rest_out);
-var peritos_name_list = [];
-for (var i = 0; i < rest_out_parsed.length; i++) {
-	peritos_name_list.push(rest_out_parsed[i].name);
-}
-var peritos_name_list_parsed = JSON.stringify(peritos_name_list);
-execution.setVariable('peritos_list', peritos_name_list_parsed);]]></activiti:expression>
-          </activiti:field>
-        </activiti:executionListener>
       </extensionElements>
     </serviceTask>
-    <endEvent id="terminateendevent1" name="TerminateEndEvent">
-      <extensionElements>
-        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
-          <activiti:field name="language">
-            <activiti:string><![CDATA[javascript]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="script">
-            <activiti:expression><![CDATA[print("ENDPROCESS RESULT");
-var polosList = execution.getVariable('polos_list');
-var peritosList = execution.getVariable('peritos_list');
-var areaConhecimentoList = execution.getVariable('areaConhecimento_list');
-print("polos_list: " + polosList);
-print("peritos_list: " + peritosList);
-print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression>
-          </activiti:field>
-        </activiti:executionListener>
-      </extensionElements>
-      <terminateEventDefinition></terminateEventDefinition>
-    </endEvent>
-    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="parallelgateway1"></sequenceFlow>
-    <sequenceFlow id="flow2" sourceRef="parallelgateway2" targetRef="terminateendevent1"></sequenceFlow>
     <serviceTask id="servicetask2" name="GetPolos" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
       <extensionElements>
         <activiti:field name="serviceURL">
@@ -62,29 +44,8 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
         <activiti:field name="outputVariable">
           <activiti:string>getPolosResult</activiti:string>
         </activiti:field>
-        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
-          <activiti:field name="language">
-            <activiti:string><![CDATA[javascript]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="script">
-            <activiti:expression><![CDATA[var rest_out = execution.getVariable('getPolosResult');
-var rest_out_parsed = JSON.parse(rest_out);
-var polos_name_list = [];
-for (var  i = 0; i < rest_out_parsed.length; i++) {
-	polos_name_list.push(rest_out_parsed[i].name);
-}
-var polos_name_list_parsed = JSON.stringify(polos_name_list);
-execution.setVariable('polos_list', polos_name_list_parsed);]]></activiti:expression>
-          </activiti:field>
-        </activiti:executionListener>
       </extensionElements>
     </serviceTask>
-    <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
-    <sequenceFlow id="flow3" sourceRef="parallelgateway1" targetRef="servicetask2"></sequenceFlow>
-    <parallelGateway id="parallelgateway2" name="Parallel Gateway"></parallelGateway>
-    <sequenceFlow id="flow4" sourceRef="servicetask2" targetRef="parallelgateway2"></sequenceFlow>
-    <sequenceFlow id="flow5" sourceRef="parallelgateway1" targetRef="servicetask1"></sequenceFlow>
-    <sequenceFlow id="flow6" sourceRef="servicetask1" targetRef="parallelgateway2"></sequenceFlow>
     <serviceTask id="servicetask3" name="GetAreasConhecimento" activiti:class="org.wso2.carbon.bpmn.extensions.rest.RESTTask" activiti:extensionId="org.wso2.developerstudio.bpmn.extensions.restTask.RESTTask">
       <extensionElements>
         <activiti:field name="serviceURL">
@@ -94,27 +55,28 @@ execution.setVariable('polos_list', polos_name_list_parsed);]]></activiti:expres
           <activiti:string>GET</activiti:string>
         </activiti:field>
         <activiti:field name="outputVariable">
-          <activiti:string>getAreaConhecimentoResult</activiti:string>
+          <activiti:string>getAreasConhecimentoResult</activiti:string>
         </activiti:field>
-        <activiti:executionListener event="end" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
-          <activiti:field name="language">
-            <activiti:string><![CDATA[javascript]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="script">
-            <activiti:expression><![CDATA[var rest_out = execution.getVariable('getAreaConhecimentoResult');
-var rest_out_parsed = JSON.parse(rest_out);
-var areaCon_name_list = [];
-for (var  i = 0; i < rest_out_parsed.length; i++) {
-    areaCon_name_list.push(rest_out_parsed[i].name);
-}
-var areaCon_name_list_parsed = JSON.stringify(areaCon_name_list);
-execution.setVariable('areaConhecimento_list', areaCon_name_list_parsed);]]></activiti:expression>
-          </activiti:field>
-        </activiti:executionListener>
       </extensionElements>
     </serviceTask>
+    <callActivity id="callactivity1" name="111GetUsers" calledElement="getusers111">
+      <extensionElements>
+        <activiti:out source="registeredUsers" target="registeredUsers"></activiti:out>
+        <activiti:out source="registeredUsersPeritos" target="registeredUsersPeritos"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
+    <parallelGateway id="parallelgateway2" name="Parallel Gateway"></parallelGateway>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="parallelgateway1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="parallelgateway2" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="parallelgateway1" targetRef="servicetask2"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="servicetask2" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="parallelgateway1" targetRef="servicetask1"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="servicetask1" targetRef="parallelgateway2"></sequenceFlow>
     <sequenceFlow id="flow7" sourceRef="parallelgateway1" targetRef="servicetask3"></sequenceFlow>
     <sequenceFlow id="flow8" sourceRef="servicetask3" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="parallelgateway1" targetRef="callactivity1"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="callactivity1" targetRef="parallelgateway2"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_getdadosaquisicao11">
     <bpmndi:BPMNPlane bpmnElement="getdadosaquisicao11" id="BPMNPlane_getdadosaquisicao11">
@@ -138,6 +100,9 @@ execution.setVariable('areaConhecimento_list', areaCon_name_list_parsed);]]></ac
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="servicetask3" id="BPMNShape_servicetask3">
         <omgdc:Bounds height="55.0" width="131.0" x="247.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="55.0" width="105.0" x="260.0" y="330.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="75.0" y="67.0"></omgdi:waypoint>
@@ -173,6 +138,16 @@ execution.setVariable('areaConhecimento_list', areaCon_name_list_parsed);]]></ac
       <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
         <omgdi:waypoint x="378.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="450.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="450.0" y="87.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="160.0" y="87.0"></omgdi:waypoint>
+        <omgdi:waypoint x="160.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="260.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="365.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="450.0" y="357.0"></omgdi:waypoint>
         <omgdi:waypoint x="450.0" y="87.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
