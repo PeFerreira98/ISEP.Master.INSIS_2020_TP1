@@ -12,14 +12,14 @@ namespace Insis.Dummy.API.Models
 
     public class Polo
     {
-        public int _ID { get; set; }
+        public int _id { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
     }
 
     public class Perito
     {
-        public int _ID { get; set; }
+        public int _id { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
 
@@ -27,7 +27,7 @@ namespace Insis.Dummy.API.Models
 
     public class AreaConhecimento
     {
-        public int _ID { get; set; }
+        public int _id { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
 
