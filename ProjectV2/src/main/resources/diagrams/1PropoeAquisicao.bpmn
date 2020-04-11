@@ -20,7 +20,7 @@ print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
       </extensionElements>
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <callActivity id="callactivity1" name="11GetDadosAquisicao" calledElement="getdadosaquisicao11">
+    <callActivity id="callactivity1" name="GetDadosAquisicao" calledElement="getdadosaquisicao11">
       <extensionElements>
         <activiti:out source="getAreasConhecimentoResult" target="getAreasConhecimentoResult"></activiti:out>
         <activiti:out source="getPolosResult" target="getPolosResult"></activiti:out>

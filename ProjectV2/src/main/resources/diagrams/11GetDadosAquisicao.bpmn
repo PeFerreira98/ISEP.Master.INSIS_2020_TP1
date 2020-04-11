@@ -59,7 +59,7 @@ print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
         </activiti:field>
       </extensionElements>
     </serviceTask>
-    <callActivity id="callactivity1" name="111GetUsers" calledElement="getusers111">
+    <callActivity id="callactivity1" name="GetUsers" calledElement="getusers111">
       <extensionElements>
         <activiti:out source="registeredUsersParsed" target="registeredUsers"></activiti:out>
         <activiti:out source="registeredUsersPeritosParsed" target="registeredUsersPeritos"></activiti:out>

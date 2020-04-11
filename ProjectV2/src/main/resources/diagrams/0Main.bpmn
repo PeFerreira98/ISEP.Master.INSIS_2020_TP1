@@ -13,7 +13,7 @@
       <lane id="lane2" name="l2"></lane>
     </laneSet>
     <startEvent id="startevent1" name="Start"></startEvent>
-    <callActivity id="callactivity1" name="GetDadosAquisicao" calledElement="propoeaquisicao1"></callActivity>
+    <callActivity id="callactivity1" name="PropoeAquisicao" calledElement="propoeaquisicao1"></callActivity>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <sequenceFlow id="flow2" sourceRef="callactivity1" targetRef="endevent1"></sequenceFlow>
