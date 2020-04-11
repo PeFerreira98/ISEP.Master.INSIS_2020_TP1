@@ -12,16 +12,23 @@ import org.activiti.engine.identity.User;
 public class FindRegisteredUsers implements JavaDelegate {
 
     public void execute(DelegateExecution execution) throws Exception {
-        ProcessEngine processEngine = ProcessEngine.getDefaultProcessEngine();
-
+    	
+    	ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+    	
         List<User> users = processEngine.getIdentityService().createUserQuery().orderByUserId().asc().list();
-
-        List<String> registeredUsers = new ArrayList<>();
+     
+        List<String> registeredUsers = new ArrayList<String>();
+        List<String> registeredUsersPeritos = new ArrayList<String>();
 
         for (User user: users) {
             registeredUsers.add(user.getId());
+            
+            if (user.getId().contains("perit")) {
+            	registeredUsersPeritos.add(user.getId());
+			}
         }
 
         execution.setVariable("registeredUsers", registeredUsers);
+        execution.setVariable("registeredUsersPeritos", registeredUsersPeritos);
     }
 }

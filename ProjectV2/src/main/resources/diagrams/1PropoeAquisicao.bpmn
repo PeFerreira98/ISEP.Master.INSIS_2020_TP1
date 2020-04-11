@@ -9,13 +9,12 @@
             <activiti:string><![CDATA[javascript]]></activiti:string>
           </activiti:field>
           <activiti:field name="script">
-            <activiti:expression><![CDATA[print("ENDPROCESS RESULT2");
-var polosList = execution.getVariable('polos_list');
-var peritosList = execution.getVariable('peritos_list');
-var areaConhecimentoList = execution.getVariable('areaConhecimento_list');
-print("polos_list: " + polosList);
-print("peritos_list: " + peritosList);
-print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression>
+            <activiti:expression><![CDATA[print("PropoeAquisicao ENDPROCESS RESULT");
+print("polos_list: " + getPolosResult);
+print("peritos_list: " + getPeritosResult);
+print("areaConhecimento_list: " + getAreaConhecimentoResult);
+print("users: " + registeredUsers);
+print("usersPeritos: " + registeredUsersPeritos);]]></activiti:expression>
           </activiti:field>
         </activiti:executionListener>
       </extensionElements>
@@ -31,7 +30,6 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
         <activiti:out source="rest_out" target="getPeritosResult"></activiti:out>
       </extensionElements>
     </callActivity>
-    <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <userTask id="usertask1" name="PropoeAquisicaoForm" activiti:assignee="proponente">
       <extensionElements>
         <activiti:formProperty id="tituloid1" name="Titulo" type="string" default="Titulo1" required="true"></activiti:formProperty>
@@ -41,8 +39,11 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
         <activiti:formProperty id="peritos1" name="Peritos" type="simpleTable" variable="getPeritosResult" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
+    <serviceTask id="servicetask1" name="Retrieve users" activiti:class="form.util.FindRegisteredUsers"></serviceTask>
+    <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <sequenceFlow id="flow4" sourceRef="callactivity1" targetRef="usertask1"></sequenceFlow>
-    <sequenceFlow id="flow5" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="usertask1" targetRef="servicetask1"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="servicetask1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_propoeaquisicao1">
     <bpmndi:BPMNPlane bpmnElement="propoeaquisicao1" id="BPMNPlane_propoeaquisicao1">
@@ -50,13 +51,16 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
         <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="64.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="630.0" y="64.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="840.0" y="64.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
         <omgdc:Bounds height="55.0" width="161.0" x="130.0" y="54.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
         <omgdc:Bounds height="55.0" width="171.0" x="370.0" y="54.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="661.0" y="54.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
         <omgdi:waypoint x="65.0" y="81.0"></omgdi:waypoint>
@@ -68,7 +72,11 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="541.0" y="81.0"></omgdi:waypoint>
-        <omgdi:waypoint x="630.0" y="81.0"></omgdi:waypoint>
+        <omgdi:waypoint x="661.0" y="81.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="766.0" y="81.0"></omgdi:waypoint>
+        <omgdi:waypoint x="840.0" y="81.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
