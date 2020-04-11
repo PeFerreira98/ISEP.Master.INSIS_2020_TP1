@@ -4,20 +4,6 @@
     <startEvent id="startevent1" name="Start"></startEvent>
     <serviceTask id="servicetask1" name="GetUsers" activiti:class="form.util.FindRegisteredUsers"></serviceTask>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
-      <extensionElements>
-        <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener">
-          <activiti:field name="language">
-            <activiti:string><![CDATA[javascript]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="script">
-            <activiti:expression><![CDATA[print("111GetUsers ENDPROCESS RESULT");
-print("users: " + registeredUsers);
-print("usersPeritos: " + registeredUsersPeritos);
-print("users: " + registeredUsersParsed);
-print("usersPeritos: " + registeredUsersPeritosParsed);]]></activiti:expression>
-          </activiti:field>
-        </activiti:executionListener>
-      </extensionElements>
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="servicetask1"></sequenceFlow>
