@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="getperitos22" name="22GetPeritos" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <callActivity id="callactivity1" name="GetUsers" calledElement="getusers111">
+      <extensionElements>
+        <activiti:out source="registeredUsersPeritosParsed" target="registeredUsersPeritos"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
+    <scriptTask id="scripttask1" name="FilterPeritos" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>var peritosAll = JSON.parse(execution.getVariable('registeredUsersPeritos'));
+var peritosSelected = JSON.parse(execution.getVariable('choosenPeritos'));
+var peritosParsed = [];
+for (var index = 0; index &lt; peritosAll.length; index++) {
+    var bool = false;
+    for (var index2 = 0; index2 &lt; peritosSelected.length; index2++) {
+        if(peritosAll[index].text == peritosSelected[index2].text){
+            bool = true;
+        }
+    }
+    if(bool == false){
+        peritosParsed.push(peritosAll[index]);
+    }
+}
+print(JSON.stringify(peritosParsed));
+execution.setVariable('registeredUsersPeritos', JSON.stringify(peritosParsed));</script>
+    </scriptTask>
+    <sequenceFlow id="flow2" sourceRef="callactivity1" targetRef="scripttask2"></sequenceFlow>
+    <scriptTask id="scripttask2" name="TransformPeritos" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>var peritosSelected = execution.getVariable('peritos1');
+var splitedArray = peritosSelected.split(',');
+var choosenPeritos = [];
+for (var i = 0; i &lt; splitedArray.length; i++) {
+    choosenPeritos.push({_id: splitedArray[i], text: splitedArray[i]});
+}
+execution.setVariable('choosenPeritos', JSON.stringify(choosenPeritos));</script>
+    </scriptTask>
+    <sequenceFlow id="flow4" sourceRef="scripttask2" targetRef="scripttask1"></sequenceFlow>
+    <endEvent id="terminateendevent1" name="TerminateEndEvent">
+      <terminateEventDefinition></terminateEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow5" sourceRef="scripttask1" targetRef="terminateendevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_getperitos22">
+    <bpmndi:BPMNPlane bpmnElement="getperitos22" id="BPMNPlane_getperitos22">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="55.0" width="105.0" x="120.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="260.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="570.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="65.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="120.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="225.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="260.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="365.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="515.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

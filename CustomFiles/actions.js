@@ -154,7 +154,6 @@ function completeTask(data, id) {
                             return;
                         } else {
                             if (vData[j].type === "string") {
-
                                 variables.push({
                                     "name": data[i].name,
                                     "value": data[i].value,
@@ -178,10 +177,22 @@ function completeTask(data, id) {
                                     "value": data[i].value
                                 });
                             }  else if (vData[j].type === "simpleTable") {
-                                variables.push({
-                                    "name": data[i].name,
-                                    "value": data[i].value
-                                });
+                                var bool1 = false;
+                                var index1 = 0;
+                                for (let index = 0; index < variables.length; index++) {
+                                    if(variables[index].name == data[i].name){
+                                        bool1 = true;
+                                        index1 = index;
+                                    }
+                                }
+                                if(bool1 == true){
+                                    variables[index1].value = variables[index1].value + ',' + data[i].value;
+                                } else {
+                                    variables.push({
+                                        "name": data[i].name,
+                                        "value": data[i].value
+                                    });
+                                }
                             } else {
                                 try {
                                     //if length is 0, then that input is not a mandatory input and user haven't enter anything
