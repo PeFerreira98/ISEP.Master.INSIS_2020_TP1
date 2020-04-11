@@ -27,13 +27,18 @@ print("areaConhecimento_list: " + areaConhecimentoList);]]></activiti:expression
         <activiti:out source="peritos_list" target="peritos_list"></activiti:out>
         <activiti:out source="areaConhecimento_list" target="areaConhecimento_list"></activiti:out>
         <activiti:out source="getAreaConhecimentoResult" target="getAreaConhecimentoResult"></activiti:out>
+        <activiti:out source="getPolosResult" target="getPolosResult"></activiti:out>
+        <activiti:out source="rest_out" target="getPeritosResult"></activiti:out>
       </extensionElements>
     </callActivity>
     <sequenceFlow id="flow3" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
-    <userTask id="usertask1" name="PropoeAquisicaoForm" activiti:assignee="admin">
+    <userTask id="usertask1" name="PropoeAquisicaoForm" activiti:assignee="proponente">
       <extensionElements>
         <activiti:formProperty id="tituloid1" name="Titulo" type="string" default="Titulo1" required="true"></activiti:formProperty>
-        <activiti:formProperty id="cenas1" name="Cenas" type="simpleSelect" variable="getAreaConhecimentoResult" writable="false" required="true"></activiti:formProperty>
+        <activiti:formProperty id="areasconhecimento1" name="Areas de Conhecimento" type="simpleSelect" variable="getAreaConhecimentoResult" writable="false" required="true"></activiti:formProperty>
+        <activiti:formProperty id="anopublicacao1" name="Ano de Publicacao" type="string" default="2020" required="true"></activiti:formProperty>
+        <activiti:formProperty id="polo1" name="Polo de Localizacao" type="simpleSelect" variable="getPolosResult"></activiti:formProperty>
+        <activiti:formProperty id="peritos1" name="Peritos" type="simpleTable" variable="getPeritosResult" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow4" sourceRef="callactivity1" targetRef="usertask1"></sequenceFlow>
