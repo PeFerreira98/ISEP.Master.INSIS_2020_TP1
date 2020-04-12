@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Insis.Dummy.API.Models;
+using System;
 
 namespace Insis.Dummy.API.Controllers
 {
@@ -9,7 +10,7 @@ namespace Insis.Dummy.API.Controllers
     public class DataController : ControllerBase
     {
         [HttpGet("1")]
-        public Data1 Get1()
+        public static Data1 Get1()
         {
             return new Data1
             {
@@ -18,7 +19,7 @@ namespace Insis.Dummy.API.Controllers
         }
 
         [HttpGet("GetPolos")]
-        public IEnumerable<Polo> GetPolos()
+        public static IEnumerable<Polo> GetPolos()
         {
             var polos = new List<Polo>();
 
@@ -29,7 +30,7 @@ namespace Insis.Dummy.API.Controllers
         }
 
         [HttpGet("GetPeritos")]
-        public IEnumerable<Perito> GetPeritos() {
+        public static IEnumerable<Perito> GetPeritos() {
             var peritos = new List<Perito>();
 
             for (int i = 0; i < 5; i++)
@@ -39,13 +40,33 @@ namespace Insis.Dummy.API.Controllers
         }
 
         [HttpGet("GetAreasConhecimento")]
-        public IEnumerable<AreaConhecimento> GetAreasConhecimento() {
+        public static IEnumerable<AreaConhecimento> GetAreasConhecimento() {
             var areaConhecimentoList = new List<AreaConhecimento>();
 
             for (int i = 0; i < 5; i++)
                 areaConhecimentoList.Add(new AreaConhecimento {_id = i, Name = $"nameAreaConhecimento{i}", Text = $"nameAreaConhecimento{i}" });
 
             return areaConhecimentoList;
+        }
+
+        [HttpGet("GetObraInPolos")]
+        public static Biblioteca GetObraInPolos()
+        {
+            var biblioteca = new Biblioteca();
+
+            var rand = new Random(DateTime.Now.Millisecond);
+
+            for (int i = 0; i < 5; i++)
+            {
+                var poloDet = new PoloDetailed($"namePolo{i}");
+
+                for (int j = 0; j < rand.Next(0,2); j++)
+                    poloDet.Obras.Add(new Obra(rand.Next(3,50).ToString()));
+
+                biblioteca.Polos.Add(poloDet);
+            }
+
+            return biblioteca;
         }
     }
 }

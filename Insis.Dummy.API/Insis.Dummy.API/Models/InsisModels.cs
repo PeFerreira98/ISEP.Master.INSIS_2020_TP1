@@ -33,4 +33,25 @@ namespace Insis.Dummy.API.Models
 
     }
 
+    public class Biblioteca
+    {
+        public List<PoloDetailed> Polos { get; set; } = new List<PoloDetailed>();
+    }
+
+    public class PoloDetailed
+    {
+        public string Name { get; set; } = "PoloName";
+        public List<Obra> Obras { get; set; } = new List<Obra>();
+
+        public PoloDetailed(string name) => Name = name;
+    }
+
+    public class Obra
+    {
+        public string Estado { get; set; } = "New";
+        public string Valor { get; set; } = "100€";
+
+        public Obra(string valor) => Valor = valor;
+
+    }
 }
