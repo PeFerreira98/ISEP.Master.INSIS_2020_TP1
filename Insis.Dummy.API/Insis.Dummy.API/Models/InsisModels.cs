@@ -48,7 +48,19 @@ namespace Insis.Dummy.API.Models
         public string Estado { get; set; } = "New";
         public string Valor { get; set; } = "100€";
 
-        public Obra(string valor) => Valor = valor;
+        public Obra(int state, string valor)
+        {
+            Estado = GetState(state);
+            Valor = valor;
+        }
 
+        private string GetState(int state) =>
+            state switch
+            {
+                0 => "New",
+                1 => "Old",
+                2 => "Damaged",
+                _ => "New"
+            };
     }
 }

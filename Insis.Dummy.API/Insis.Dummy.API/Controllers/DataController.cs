@@ -52,7 +52,7 @@ namespace Insis.Dummy.API.Controllers
         }
 
         [HttpGet("GetObraInPolos")]
-        public Biblioteca GetObraInPolos()
+        public IEnumerable<PoloDetailed> GetObraInPolos()
         {
             var biblioteca = new Biblioteca();
 
@@ -62,13 +62,13 @@ namespace Insis.Dummy.API.Controllers
             {
                 var poloDet = new PoloDetailed($"namePolo{i}");
 
-                for (int j = 0; j < rand.Next(0, 2); j++)
-                    poloDet.Obras.Add(new Obra(rand.Next(3, 50).ToString()));
+                for (int j = 0; j < rand.Next(0, 3); j++)
+                    poloDet.Obras.Add(new Obra(rand.Next(0, 4), $"{rand.Next(3, 50)}€"));
 
                 biblioteca.Polos.Add(poloDet);
             }
 
-            return biblioteca;
+            return biblioteca.Polos;
         }
     }
 }
