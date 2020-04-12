@@ -24,9 +24,9 @@ for (var index = 0; index < selectedFacts.length; index++) {
     }
 }
 
-var isPermited= false;
-if (totalPeritos / fact1 >= 0.5 ) {
-    isPermited = true;
+var isPermited= 0;
+if ((totalPeritos/2) < fact1 ) {
+    isPermited = 1;
 }
 
 execution.setVariable('isPermited', isPermited);
