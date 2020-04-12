@@ -1,21 +1,35 @@
 
+print("----mainScrpt3-----");
+print("titulo: " + titulo1);
+print("anopublicacao: " + anopublicacao1);
+print("areaConhecimento: " + areasconhecimento1);
+print("polo1: " + polo1);
+print("autores: " + autores1);
+print("peritos1: " + peritos1);
+print("peritos2: " + peritos2);
+print("facts: " + selectedFacts);
+print("permited: " + isPermited);
+print("----mainScrpt3-----");
+
 var totalPeritos = (execution.getVariable('registeredUsers')).length;
 var selectedFacts = execution.getVariable('selectedFacts');
 
-print(totalPeritos);
-print(selectedFacts); /* [p1: 0, p2:1, p3:0] */
-print(selectedFacts[0]);
-var cenas = JSON.stringify(selectedFacts[0]);
-print(cenas[cenas.length]);
-
 var fact0 = 0;
 var fact1 = 0;
-for (var index = 0; index < array.length; index++) {
-    if (condition) {
-        
+for (var index = 0; index < selectedFacts.length; index++) {
+    if (selectedFacts[index] == 0) {
+        fact0++;
+    } else {
+        fact1++;
     }
 }
 
+var isPermited= false;
+if (totalPeritos / fact1 >= 0.5 ) {
+    isPermited = true;
+}
+
+execution.setVariable('isPermited', isPermited);
 
 
 var registeredUsers = execution.getVariable('registeredUsers');

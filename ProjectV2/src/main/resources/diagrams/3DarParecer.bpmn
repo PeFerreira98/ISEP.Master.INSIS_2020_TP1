@@ -61,9 +61,22 @@ execution.setVariable('chooseList',JSON.stringify(chooseList));</script>
       <script>var totalPeritos = (execution.getVariable('registeredUsers')).length;
 var selectedFacts = execution.getVariable('selectedFacts');
 
-print(totalPeritos);
-print(selectedFacts);
-print(selectedFacts[0]);</script>
+var fact0 = 0;
+var fact1 = 0;
+for (var index = 0; index &lt; selectedFacts.length; index++) {
+    if (selectedFacts[index] == 0) {
+        fact0++;
+    } else {
+        fact1++;
+    }
+}
+
+var isPermited= false;
+if (totalPeritos / fact1 &gt;= 0.5 ) {
+    isPermited = true;
+}
+
+execution.setVariable('isPermited', isPermited);</script>
     </scriptTask>
     <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="usertask1" cancelActivity="false">
       <timerEventDefinition>
