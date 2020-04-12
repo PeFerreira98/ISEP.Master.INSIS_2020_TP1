@@ -1,4 +1,19 @@
 
+var peritosSelectedByProponente = execution.getVariable('peritos1');
+var peritosSelectedByBiblioMor = execution.getVariable('peritos2');
+peritosSelectedByProponente = peritosSelectedByProponente.split(',');
+peritosSelectedByBiblioMor = peritosSelectedByBiblioMor.split(',');
+var peritosToSend = '[';
+for (var i = 0; i < peritosSelectedByProponente.length; i++) {
+    peritosToSend = peritosToSend + peritosSelectedByProponente[i] + ", ";
+}
+for (var i = 0; i < peritosSelectedByBiblioMor.length; i++) {
+    peritosToSend = peritosToSend + peritosSelectedByBiblioMor[i] + ", ";
+}
+peritosToSend = peritosToSend.slice(0,-2);
+peritosToSend = peritosToSend + ']';
+print(peritosToSend);
+execution.setVariable('peritosToSend', peritosToSend);
 
 
 

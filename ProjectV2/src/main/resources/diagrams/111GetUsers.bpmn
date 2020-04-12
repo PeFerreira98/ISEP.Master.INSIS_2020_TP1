@@ -11,7 +11,7 @@
     <scriptTask id="scripttask1" name="ParseUsersList" scriptFormat="javascript" activiti:autoStoreVariables="false">
       <script>var users = execution.getVariable('registeredUsers');
 var peritos = execution.getVariable('registeredUsersPeritos');
-
+print(users);
 var parsedUsers = [];
 var parsedPeritos = [];
 

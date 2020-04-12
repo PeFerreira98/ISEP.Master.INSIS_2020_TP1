@@ -77,6 +77,7 @@ print("----mainScrpt2-----");</script>
         <activiti:in source="anopublicacao1" target="anopublicacao1"></activiti:in>
         <activiti:in source="polo1" target="polo1"></activiti:in>
         <activiti:in source="autores1" target="autores1"></activiti:in>
+        <activiti:out source="selectedFacts" target="selectedFacts"></activiti:out>
       </extensionElements>
     </callActivity>
     <endEvent id="endevent1" name="End"></endEvent>
@@ -90,6 +91,7 @@ print("polo1: " + polo1);
 print("autores: " + autores1);
 print("peritos1: " + peritos1);
 print("peritos2: " + peritos2);
+print("facts: " + selectedFacts);
 print("----mainScrpt3-----");</script>
     </scriptTask>
     <sequenceFlow id="flow7" sourceRef="scripttask3" targetRef="endevent1"></sequenceFlow>

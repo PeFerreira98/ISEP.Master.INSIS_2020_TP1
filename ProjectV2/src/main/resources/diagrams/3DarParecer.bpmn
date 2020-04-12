@@ -5,7 +5,41 @@
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
+    <scriptTask id="scripttask1" name="ParsePeritosList" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>var peritosSelectedByProponente = execution.getVariable('peritos1');
+var peritosSelectedByBiblioMor = execution.getVariable('peritos2');
+peritosSelectedByProponente = peritosSelectedByProponente.split(',');
+peritosSelectedByBiblioMor = peritosSelectedByBiblioMor.split(',');
+var peritosToSend = '[';
+for (var i = 0; i &lt; peritosSelectedByProponente.length; i++) {
+    peritosToSend = peritosToSend + peritosSelectedByProponente[i] + ", ";
+}
+for (var i = 0; i &lt; peritosSelectedByBiblioMor.length; i++) {
+    peritosToSend = peritosToSend + peritosSelectedByBiblioMor[i] + ", ";
+}
+print(peritosToSend);
+peritosToSend = peritosToSend.slice(0,-2);
+peritosToSend = peritosToSend + ']';
+print(peritosToSend);
+execution.setVariable('peritosToSend', peritosToSend);</script>
+    </scriptTask>
+    <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="usertask1"></sequenceFlow>
+    <userTask id="usertask1" name="DarParecer" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:formProperty id="selectedFact" name="Parecer" type="simpleSelect" writable="false" required="true">
+          <activiti:value id="0" name="negativo"></activiti:value>
+          <activiti:value id="1" name="positivo"></activiti:value>
+        </activiti:formProperty>
+        <activiti:taskListener event="complete" class="form.util.SelectedInfoListener">
+          <activiti:field name="variableNameExpression">
+            <activiti:string><![CDATA[selectedFact]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${peritosToSend}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="flow3" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_darparecer3">
     <bpmndi:BPMNPlane bpmnElement="darparecer3" id="BPMNPlane_darparecer3">
@@ -13,11 +47,25 @@
         <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="30.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="310.0" y="40.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="500.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="140.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="320.0" y="20.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="95.0" y="47.0"></omgdi:waypoint>
-        <omgdi:waypoint x="310.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="140.0" y="47.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="245.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="47.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="425.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="47.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
