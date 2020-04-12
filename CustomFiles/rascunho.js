@@ -1,19 +1,58 @@
 
+var totalPeritos = (execution.getVariable('registeredUsers')).length;
+var selectedFacts = execution.getVariable('selectedFacts');
+
+print(totalPeritos);
+print(selectedFacts); /* [p1: 0, p2:1, p3:0] */
+print(selectedFacts[0]);
+var cenas = JSON.stringify(selectedFacts[0]);
+print(cenas[cenas.length]);
+
+var fact0 = 0;
+var fact1 = 0;
+for (var index = 0; index < array.length; index++) {
+    if (condition) {
+        
+    }
+}
+
+
+
+var registeredUsers = execution.getVariable('registeredUsers');
 var peritosSelectedByProponente = execution.getVariable('peritos1');
 var peritosSelectedByBiblioMor = execution.getVariable('peritos2');
 peritosSelectedByProponente = peritosSelectedByProponente.split(',');
 peritosSelectedByBiblioMor = peritosSelectedByBiblioMor.split(',');
-var peritosToSend = '[';
-for (var i = 0; i < peritosSelectedByProponente.length; i++) {
-    peritosToSend = peritosToSend + peritosSelectedByProponente[i] + ", ";
+
+var peritosToDelete = [];
+for (var index = 0; index < registeredUsers.length; index++) {
+    var bool = false;
+    for (var i = 0; i < peritosSelectedByProponente.length; i++) {
+        if (JSON.stringify(registeredUsers[index]) == JSON.stringify(peritosSelectedByProponente[i]) ) {
+            bool = true;
+        }
+    }
+    for (var i = 0; i < peritosSelectedByBiblioMor.length; i++) {
+        if (JSON.stringify(registeredUsers[index]) == JSON.stringify(peritosSelectedByBiblioMor[i]) ) {
+            bool = true;
+        }
+    }
+
+    if (!bool) {
+        peritosToDelete.push(registeredUsers[index]);
+    }
 }
-for (var i = 0; i < peritosSelectedByBiblioMor.length; i++) {
-    peritosToSend = peritosToSend + peritosSelectedByBiblioMor[i] + ", ";
+
+for (var index = 0; index < peritosToDelete.length; index++) {
+    var c = registeredUsers.indexOf(peritosToDelete[index]);
+    delete registeredUsers[c];
 }
-peritosToSend = peritosToSend.slice(0,-2);
-peritosToSend = peritosToSend + ']';
-print(peritosToSend);
-execution.setVariable('peritosToSend', peritosToSend);
+
+print(registeredUsers);
+
+var chooseList = JSON.parse("[{\"_id\": 0, \"text\": \"Negativo\"},{\"_id\": 1, \"text\": \"Positivo\"}]");
+print(JSON.stringify(chooseList));
+execution.setVariable('chooseList',JSON.stringify(chooseList));
 
 
 

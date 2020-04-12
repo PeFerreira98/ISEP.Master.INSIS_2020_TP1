@@ -5,41 +5,75 @@
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="callactivity1"></sequenceFlow>
     <scriptTask id="scripttask1" name="ParsePeritosList" scriptFormat="javascript" activiti:autoStoreVariables="false">
-      <script>var peritosSelectedByProponente = execution.getVariable('peritos1');
+      <script>var registeredUsers = execution.getVariable('registeredUsers');
+var peritosSelectedByProponente = execution.getVariable('peritos1');
 var peritosSelectedByBiblioMor = execution.getVariable('peritos2');
 peritosSelectedByProponente = peritosSelectedByProponente.split(',');
 peritosSelectedByBiblioMor = peritosSelectedByBiblioMor.split(',');
-var peritosToSend = '[';
-for (var i = 0; i &lt; peritosSelectedByProponente.length; i++) {
-    peritosToSend = peritosToSend + peritosSelectedByProponente[i] + ", ";
+
+var peritosToDelete = [];
+for (var index = 0; index &lt; registeredUsers.length; index++) {
+    var bool = false;
+    for (var i = 0; i &lt; peritosSelectedByProponente.length; i++) {
+        if (JSON.stringify(registeredUsers[index]) == JSON.stringify(peritosSelectedByProponente[i]) ) {
+            bool = true;
+        }
+    }
+    for (var i = 0; i &lt; peritosSelectedByBiblioMor.length; i++) {
+        if (JSON.stringify(registeredUsers[index]) == JSON.stringify(peritosSelectedByBiblioMor[i]) ) {
+            bool = true;
+        }
+    }
+
+    if (!bool) {
+        peritosToDelete.push(registeredUsers[index]);
+    }
 }
-for (var i = 0; i &lt; peritosSelectedByBiblioMor.length; i++) {
-    peritosToSend = peritosToSend + peritosSelectedByBiblioMor[i] + ", ";
+
+for (var index = 0; index &lt; peritosToDelete.length; index++) {
+    var c = registeredUsers.indexOf(peritosToDelete[index]);
+    delete registeredUsers[c];
 }
-print(peritosToSend);
-peritosToSend = peritosToSend.slice(0,-2);
-peritosToSend = peritosToSend + ']';
-print(peritosToSend);
-execution.setVariable('peritosToSend', peritosToSend);</script>
+
+var chooseList = JSON.parse("[{\"_id\": 0, \"text\": \"Negativo\"},{\"_id\": 1, \"text\": \"Positivo\"}]");
+execution.setVariable('chooseList',JSON.stringify(chooseList));</script>
     </scriptTask>
-    <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="usertask1"></sequenceFlow>
     <userTask id="usertask1" name="DarParecer" activiti:assignee="${assignee}">
       <extensionElements>
-        <activiti:formProperty id="selectedFact" name="Parecer" type="simpleSelect" writable="false" required="true">
-          <activiti:value id="0" name="negativo"></activiti:value>
-          <activiti:value id="1" name="positivo"></activiti:value>
-        </activiti:formProperty>
+        <activiti:formProperty id="selectedFact" name="Parecer" type="simpleSelect" variable="chooseList" writable="false" required="true"></activiti:formProperty>
         <activiti:taskListener event="complete" class="form.util.SelectedInfoListener">
           <activiti:field name="variableNameExpression">
             <activiti:string><![CDATA[selectedFact]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
       </extensionElements>
-      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${peritosToSend}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${registeredUsers}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
     </userTask>
-    <sequenceFlow id="flow3" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
+    <callActivity id="callactivity1" name="GetUsers" calledElement="getusers111">
+      <extensionElements>
+        <activiti:out source="registeredUsers" target="registeredUsers"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow4" sourceRef="callactivity1" targetRef="scripttask1"></sequenceFlow>
+    <scriptTask id="scripttask2" name="CountPareceres" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>var totalPeritos = (execution.getVariable('registeredUsers')).length;
+var selectedFacts = execution.getVariable('selectedFacts');
+
+print(totalPeritos);
+print(selectedFacts);
+print(selectedFacts[0]);</script>
+    </scriptTask>
+    <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="usertask1" cancelActivity="false">
+      <timerEventDefinition>
+        <timeDuration>PT60S</timeDuration>
+      </timerEventDefinition>
+    </boundaryEvent>
+    <sequenceFlow id="flow7" sourceRef="scripttask2" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="boundarytimer1" targetRef="scripttask2"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="scripttask1" targetRef="usertask1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_darparecer3">
     <bpmndi:BPMNPlane bpmnElement="darparecer3" id="BPMNPlane_darparecer3">
@@ -47,25 +81,46 @@ execution.setVariable('peritosToSend', peritosToSend);</script>
         <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="30.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="500.0" y="30.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="185.0" y="290.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="140.0" y="20.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="300.0" y="20.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="320.0" y="20.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="150.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
+        <omgdc:Bounds height="30.0" width="30.0" x="227.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="55.0" width="105.0" x="150.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="300.0" y="177.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="95.0" y="47.0"></omgdi:waypoint>
-        <omgdi:waypoint x="140.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="150.0" y="47.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-        <omgdi:waypoint x="245.0" y="47.0"></omgdi:waypoint>
-        <omgdi:waypoint x="320.0" y="47.0"></omgdi:waypoint>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="255.0" y="47.0"></omgdi:waypoint>
+        <omgdi:waypoint x="300.0" y="47.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
-        <omgdi:waypoint x="425.0" y="47.0"></omgdi:waypoint>
-        <omgdi:waypoint x="500.0" y="47.0"></omgdi:waypoint>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="352.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="202.0" y="290.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="257.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="300.0" y="204.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="202.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="202.0" y="290.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="352.0" y="75.0"></omgdi:waypoint>
+        <omgdi:waypoint x="202.0" y="150.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

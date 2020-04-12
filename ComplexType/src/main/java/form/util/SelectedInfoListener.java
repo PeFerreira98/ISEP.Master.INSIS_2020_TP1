@@ -13,7 +13,7 @@ public class SelectedInfoListener implements TaskListener {
 	
 	private static final String ASSIGNEE = "assignee";
     private static final String SELECTED_FACT = "selectedFact";
-    private static final String SELECTED_FACTS = "selectedFact";
+    private static final String SELECTED_FACTS = "selectedFacts";
 
     public Expression variableNameExpression;
 
@@ -29,7 +29,7 @@ public class SelectedInfoListener implements TaskListener {
         String selectedFact = delegateTask.getVariable(SELECTED_FACT, String.class);
         String assignee = delegateTask.getVariable(ASSIGNEE, String.class);
 
-        selectedFacts.add(assignee + ": " + selectedFact);
+        selectedFacts.add(selectedFact);
 
         delegateTask.setVariable(SELECTED_FACTS, selectedFacts);
     }

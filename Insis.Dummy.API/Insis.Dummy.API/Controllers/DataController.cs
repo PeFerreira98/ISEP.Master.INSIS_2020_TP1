@@ -70,5 +70,14 @@ namespace Insis.Dummy.API.Controllers
 
             return biblioteca.Polos;
         }
+
+        [HttpGet("GetParecerList")]
+        public IEnumerable<Parecer> GetParecerList()
+        {
+            return new List<Parecer>() {
+                new Parecer() { _id = 0, Text = "Negativo"},
+                new Parecer() { _id = 1, Text = "Positivo" }
+                };
+        }
     }
 }

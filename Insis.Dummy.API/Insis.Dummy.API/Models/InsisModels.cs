@@ -63,4 +63,10 @@ namespace Insis.Dummy.API.Models
                 _ => "New"
             };
     }
+
+    public class Parecer
+    {
+        public int _id { get; set; }
+        public string Text { get; set; }
+    }
 }
