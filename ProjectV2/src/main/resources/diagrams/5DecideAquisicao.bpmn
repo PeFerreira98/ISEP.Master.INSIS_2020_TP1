@@ -4,13 +4,32 @@
     <startEvent id="startevent1" name="Start"></startEvent>
     <scriptTask id="scripttask1" name="Dummy" scriptFormat="javascript" activiti:autoStoreVariables="false">
       <script>var p = 1;
-execution.setVariable('isPermitedDecideAquisicao', p);</script>
+execution.setVariable('isPermitedDecideAquisicao', p);
+
+var c1 = "";
+var c2 = 'admin';
+execution.setVariable('coment1', c1);
+execution.setVariable('assigneeUsr', c2);</script>
     </scriptTask>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
-    <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="callactivity1"></sequenceFlow>
+    <callActivity id="callactivity1" name="GeneralForm" calledElement="generalForm44">
+      <extensionElements>
+        <activiti:in source="titulo1" target="titulo1"></activiti:in>
+        <activiti:in source="areasconhecimento1" target="areasconhecimento1"></activiti:in>
+        <activiti:in source="anopublicacao1" target="anopublicacao1"></activiti:in>
+        <activiti:in source="polo1" target="polo1"></activiti:in>
+        <activiti:in source="autores1" target="autores1"></activiti:in>
+        <activiti:in source="obrasDetail" target="obrasDetail"></activiti:in>
+        <activiti:in source="coment1" target="coment1"></activiti:in>
+        <activiti:in source="assigneeUsr" target="assigneeUsr"></activiti:in>
+        <activiti:out source="isPermited1" target="isPermitedDecideAquisicao"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow3" sourceRef="callactivity1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_decideAquisicao5">
     <bpmndi:BPMNPlane bpmnElement="decideAquisicao5" id="BPMNPlane_decideAquisicao5">
@@ -18,18 +37,25 @@ execution.setVariable('isPermitedDecideAquisicao', p);</script>
         <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="40.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="30.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="140.0" y="30.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="380.0" y="40.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="420.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="callactivity1" id="BPMNShape_callactivity1">
+        <omgdc:Bounds height="55.0" width="105.0" x="290.0" y="30.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="95.0" y="57.0"></omgdi:waypoint>
-        <omgdi:waypoint x="180.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="140.0" y="57.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-        <omgdi:waypoint x="285.0" y="57.0"></omgdi:waypoint>
-        <omgdi:waypoint x="380.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="245.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="290.0" y="57.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="395.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="57.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

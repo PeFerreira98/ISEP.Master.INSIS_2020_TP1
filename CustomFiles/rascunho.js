@@ -1,5 +1,10 @@
 
 
+var c1 = "";
+var c2 = admin;
+execution.setVariable('coment1', c1);
+execution.setVariable('assigneeUsr', c2);
+
 var stuff = JSON.parse(restResult);
 var c = stuff.timeframe;
 print("time: " + c);

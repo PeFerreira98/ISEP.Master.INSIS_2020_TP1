@@ -155,6 +155,12 @@ print("----mainScrpt4-----");</script>
     <sequenceFlow id="flow12" sourceRef="exclusivegateway2" targetRef="endevent2"></sequenceFlow>
     <callActivity id="callactivity5" name="Decide Aquisicao" calledElement="decideAquisicao5">
       <extensionElements>
+        <activiti:in source="titulo1" target="titulo1"></activiti:in>
+        <activiti:in source="areasconhecimento1" target="areasconhecimento1"></activiti:in>
+        <activiti:in source="anopublicacao1" target="anopublicacao1"></activiti:in>
+        <activiti:in source="polo1" target="polo1"></activiti:in>
+        <activiti:in source="autores1" target="autores1"></activiti:in>
+        <activiti:in source="obrasDetail" target="obrasDetail"></activiti:in>
         <activiti:out source="isPermitedDecideAquisicao" target="isPermitedDecideAquisicao"></activiti:out>
       </extensionElements>
     </callActivity>
@@ -179,11 +185,18 @@ print("----mainScrpt5-----");</script>
     <sequenceFlow id="flow14" sourceRef="callactivity5" targetRef="scripttask5"></sequenceFlow>
     <callActivity id="callactivity6" name="Elabora PAD" calledElement="elaborapad6">
       <extensionElements>
-        <activiti:out source="isPermitedElaboraPAD" target="isPermitedElaboraPAD"></activiti:out>
+        <activiti:out source="padComment" target="padComment"></activiti:out>
       </extensionElements>
     </callActivity>
     <callActivity id="callactivity7" name="Aprova PAD" calledElement="aprovapad7">
       <extensionElements>
+        <activiti:in source="padComment" target="coment1"></activiti:in>
+        <activiti:in source="titulo1" target="titulo1"></activiti:in>
+        <activiti:in source="areasconhecimento1" target="areasconhecimento1"></activiti:in>
+        <activiti:in source="anopublicacao1" target="anopublicacao1"></activiti:in>
+        <activiti:in source="polo1" target="polo1"></activiti:in>
+        <activiti:in source="autores1" target="autores1"></activiti:in>
+        <activiti:in source="obrasDetail" target="obrasDetail"></activiti:in>
         <activiti:out source="isPermitedAprovaPAD" target="isPermitedAprovaPAD"></activiti:out>
       </extensionElements>
     </callActivity>
@@ -210,7 +223,6 @@ print("facts: " + selectedFacts);
 print("permited: " + isPermited);
 print("permited1: " + isPermitedDispFin);
 print("permited2: " + isPermitedDecideAquisicao);
-print("permited3: " + isPermitedElaboraPAD);
 print("----mainScrpt6-----");</script>
     </scriptTask>
     <sequenceFlow id="flow23" sourceRef="callactivity6" targetRef="scripttask6"></sequenceFlow>
@@ -228,7 +240,6 @@ print("facts: " + selectedFacts);
 print("permited: " + isPermited);
 print("permited1: " + isPermitedDispFin);
 print("permited2: " + isPermitedDecideAquisicao);
-print("permited3: " + isPermitedElaboraPAD);
 print("permited4: " + isPermitedAprovaPAD);
 print("----mainScrpt7-----");</script>
     </scriptTask>

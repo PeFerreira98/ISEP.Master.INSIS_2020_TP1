@@ -6,8 +6,8 @@
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
     <scriptTask id="scripttask1" name="Dummy" scriptFormat="javascript" activiti:autoStoreVariables="false">
-      <script>var p = 1;
-execution.setVariable('isPermitedElaboraPAD', p);</script>
+      <script>var p = "insert pad here (auto)";
+execution.setVariable('padComment', p);</script>
     </scriptTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
     <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="terminateendevent1"></sequenceFlow>

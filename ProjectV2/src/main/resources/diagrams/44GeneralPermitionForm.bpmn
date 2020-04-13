@@ -3,21 +3,21 @@
   <process id="generalForm44" name="GeneralForm" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <userTask id="usertask1" name="AproveForm" activiti:assignee="${assigneeUsr}">
-    <extensionElements>
+      <extensionElements>
         <activiti:formProperty id="titulo1" name="Titulo" type="string" variable="titulo1" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="anopublicacao1" name="Ano de Publicacao" type="long" variable="anopublicacao1" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="autores1" name="Autores" type="string" variable="autores1" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="areasconhecimento1" name="Areas de Conhecimento" type="string" variable="areasconhecimento1" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="polo1" name="Polo de Localizacao" type="string" variable="polo1" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="obrasDetail1" name="Detalhe de Obra nos Polos" type="string" variable="obrasDetail" writable="false" required="true"></activiti:formProperty>
-        <activiti:formProperty id="coment1" name="Comentarios Extra" type="string" variable="comment2" writable="false" required="true"></activiti:formProperty>
-        <activiti:formProperty id="isPermited1" name="Existe Disponibilidade Financeira?" type="enum" required="true">
+        <activiti:formProperty id="comm2" name="Comentarios Extra" type="string" variable="coment1" writable="false" required="true"></activiti:formProperty>
+        <activiti:formProperty id="isPermited1" name="Permite?" type="enum" required="true">
           <activiti:value id="0" name="Nao"></activiti:value>
           <activiti:value id="1" name="Sim"></activiti:value>
         </activiti:formProperty>
         <activiti:formProperty id="comentario1" name="Comentario" type="string" default="Comentario" required="true"></activiti:formProperty>
       </extensionElements>
-      </userTask>
+    </userTask>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
