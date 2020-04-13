@@ -36,6 +36,8 @@ for (var index = 0; index &lt; peritosToDelete.length; index++) {
     delete registeredUsers[c];
 }
 
+print(timeFrame);
+
 var chooseList = JSON.parse("[{\"_id\": 0, \"text\": \"Negativo\"},{\"_id\": 1, \"text\": \"Positivo\"}]");
 execution.setVariable('chooseList',JSON.stringify(chooseList));</script>
     </scriptTask>
@@ -71,8 +73,8 @@ for (var index = 0; index &lt; selectedFacts.length; index++) {
     }
 }
 
-var isPermited= 0;
-if ((totalPeritos/2) &lt; fact1 ) {
+var isPermited = 0;
+if ((totalPeritos / 2) &lt; fact1) {
     isPermited = 1;
 }
 
@@ -80,7 +82,7 @@ execution.setVariable('isPermited', isPermited);</script>
     </scriptTask>
     <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="usertask1" cancelActivity="false">
       <timerEventDefinition>
-        <timeDuration>PT60S</timeDuration>
+        <timeDuration>${timeFrame}</timeDuration>
       </timerEventDefinition>
     </boundaryEvent>
     <sequenceFlow id="flow7" sourceRef="scripttask2" targetRef="terminateendevent1"></sequenceFlow>
@@ -126,6 +128,15 @@ for (var i = 0; i &lt; c1.length; i++) {
 execution.setVariable('obrasDetail', s1);</script>
     </scriptTask>
     <sequenceFlow id="flow20" sourceRef="scripttask3" targetRef="parallelgateway2"></sequenceFlow>
+    <scriptTask id="scripttask4" name="ParecerOff" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>isPermited = 0;
+execution.setVariable('isPermited', isPermited);</script>
+    </scriptTask>
+    <sequenceFlow id="flow22" sourceRef="scripttask4" targetRef="terminateendevent1"></sequenceFlow>
+    <boundaryEvent id="boundaryerror1" name="Error" attachedToRef="scripttask2">
+      <errorEventDefinition></errorEventDefinition>
+    </boundaryEvent>
+    <sequenceFlow id="flow23" sourceRef="boundaryerror1" targetRef="scripttask4"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_darparecer3">
     <bpmndi:BPMNPlane bpmnElement="darparecer3" id="BPMNPlane_darparecer3">
@@ -150,6 +161,9 @@ execution.setVariable('obrasDetail', s1);</script>
       <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
         <omgdc:Bounds height="55.0" width="105.0" x="970.0" y="20.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundaryerror1" id="BPMNShape_boundaryerror1">
+        <omgdc:Bounds height="30.0" width="30.0" x="1040.0" y="61.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="parallelgateway1" id="BPMNShape_parallelgateway1">
         <omgdc:Bounds height="40.0" width="40.0" x="185.0" y="27.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
@@ -161,6 +175,9 @@ execution.setVariable('obrasDetail', s1);</script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask3" id="BPMNShape_scripttask3">
         <omgdc:Bounds height="55.0" width="105.0" x="490.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask4" id="BPMNShape_scripttask4">
+        <omgdc:Bounds height="55.0" width="105.0" x="980.0" y="180.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="1022.0" y="75.0"></omgdi:waypoint>
@@ -207,6 +224,14 @@ execution.setVariable('obrasDetail', s1);</script>
         <omgdi:waypoint x="595.0" y="167.0"></omgdi:waypoint>
         <omgdi:waypoint x="680.0" y="167.0"></omgdi:waypoint>
         <omgdi:waypoint x="680.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="980.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="827.0" y="185.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="1055.0" y="91.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1032.0" y="180.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

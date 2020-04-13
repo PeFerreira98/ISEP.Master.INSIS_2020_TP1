@@ -1,5 +1,11 @@
 
 
+var stuff = JSON.parse(restResult);
+var c = stuff.timeframe;
+print("time: " + c);
+execution.setVariable('timeFrame', c);
+
+
 print("----mainScrpt7-----");
 print("titulo: " + titulo1);
 print("anopublicacao: " + anopublicacao1);
@@ -52,6 +58,7 @@ print("permited: " + isPermited);
 print("permited1: " + isPermitedDispFin);
 print("permited2: " + isPermitedDecideAquisicao);
 print("----mainScrpt5-----");
+
 
 
 var totalPeritos = (execution.getVariable('registeredUsers')).length;

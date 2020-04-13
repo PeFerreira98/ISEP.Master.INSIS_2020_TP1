@@ -9,12 +9,12 @@ namespace Insis.Dummy.API.Controllers
     [ApiController]
     public class DataController : ControllerBase
     {
-        [HttpGet("1")]
-        public Data1 Get1()
+        [HttpGet("ParamInit")]
+        public Data1 ParamInit()
         {
             return new Data1
             {
-                Timeframe = "10T"
+                Timeframe = "PT60S"
             };
         }
 

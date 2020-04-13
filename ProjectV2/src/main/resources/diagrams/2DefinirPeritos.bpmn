@@ -2,18 +2,7 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="definirperito2" name="2DefinirPerito" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
-    <scriptTask id="scripttask1" name="Script Task" scriptFormat="javascript" activiti:autoStoreVariables="false">
-      <script>print("2definirperito ENDPROCESS RESULT------------------");
-print("titulo: " + titulo1);
-print("anopublicacao: " + anopublicacao1);
-print("areaConhecimento: " + areasconhecimento1);
-print("peritos1: " + peritos1);
-print("polo1: " + polo1);
-print("peritos: " + registeredUsersPeritos);
-print("peritos2: " + peritos2);
-print("2definirperito ENDPROCESS RESULT------------------");</script>
-    </scriptTask>
-    <userTask id="usertask1" name="DefinirPeritos" activiti:assignee="proponente">
+    <userTask id="usertask1" name="DefinirPeritos" activiti:assignee="bibliotecariomor">
       <extensionElements>
         <activiti:formProperty id="titulo1" name="Titulo" type="string" variable="titulo1" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="anopublicacao1" name="Ano de Publicacao" type="long" variable="anopublicacao1" writable="false" required="true"></activiti:formProperty>
@@ -24,7 +13,6 @@ print("2definirperito ENDPROCESS RESULT------------------");</script>
         <activiti:formProperty id="peritos2" name="Peritos a Escolher" type="simpleTable" variable="registeredUsersPeritos" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
-    <sequenceFlow id="flow4" sourceRef="usertask1" targetRef="scripttask1"></sequenceFlow>
     <callActivity id="callactivity1" name="GetPeritosRestantes" calledElement="getperitos22">
       <extensionElements>
         <activiti:in source="peritos1" target="peritos1"></activiti:in>
@@ -36,15 +24,12 @@ print("2definirperito ENDPROCESS RESULT------------------");</script>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <sequenceFlow id="flow7" sourceRef="scripttask1" targetRef="terminateendevent1"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="usertask1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_definirperito2">
     <bpmndi:BPMNPlane bpmnElement="definirperito2" id="BPMNPlane_definirperito2">
       <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="20.0" y="40.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="440.0" y="30.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
         <omgdc:Bounds height="55.0" width="105.0" x="280.0" y="30.0"></omgdc:Bounds>
@@ -55,10 +40,6 @@ print("2definirperito ENDPROCESS RESULT------------------");</script>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="620.0" y="40.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
-        <omgdi:waypoint x="385.0" y="57.0"></omgdi:waypoint>
-        <omgdi:waypoint x="440.0" y="57.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
         <omgdi:waypoint x="55.0" y="57.0"></omgdi:waypoint>
         <omgdi:waypoint x="100.0" y="57.0"></omgdi:waypoint>
@@ -68,7 +49,7 @@ print("2definirperito ENDPROCESS RESULT------------------");</script>
         <omgdi:waypoint x="280.0" y="57.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
-        <omgdi:waypoint x="545.0" y="57.0"></omgdi:waypoint>
+        <omgdi:waypoint x="385.0" y="57.0"></omgdi:waypoint>
         <omgdi:waypoint x="620.0" y="57.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
