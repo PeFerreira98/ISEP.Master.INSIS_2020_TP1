@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-  <process id="aferirDispFinanceira4" name="4AferirDispFinanceira" isExecutable="true">
+  <process id="aprovapad7" name="7 Aprova PAD" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <endEvent id="terminateendevent1" name="TerminateEndEvent">
       <terminateEventDefinition></terminateEventDefinition>
     </endEvent>
-    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
     <scriptTask id="scripttask1" name="Dummy" scriptFormat="javascript" activiti:autoStoreVariables="false">
       <script>var p = 1;
-execution.setVariable('isPermitedDispFin', p);</script>
+execution.setVariable('isPermitedAprovaPAD', p);</script>
     </scriptTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="scripttask1"></sequenceFlow>
     <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="terminateendevent1"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_aferirDispFinanceira4">
-    <bpmndi:BPMNPlane bpmnElement="aferirDispFinanceira4" id="BPMNPlane_aferirDispFinanceira4">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_aprovapad7">
+    <bpmndi:BPMNPlane bpmnElement="aprovapad7" id="BPMNPlane_aprovapad7">
       <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="80.0" y="50.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="60.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="terminateendevent1" id="BPMNShape_terminateendevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="400.0" y="50.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="240.0" y="70.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="40.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="150.0" y="180.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
-        <omgdi:waypoint x="115.0" y="67.0"></omgdi:waypoint>
-        <omgdi:waypoint x="180.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="117.0" y="95.0"></omgdi:waypoint>
+        <omgdi:waypoint x="202.0" y="180.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-        <omgdi:waypoint x="285.0" y="67.0"></omgdi:waypoint>
-        <omgdi:waypoint x="400.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="202.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="257.0" y="105.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

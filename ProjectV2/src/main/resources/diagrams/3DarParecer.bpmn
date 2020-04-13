@@ -41,7 +41,9 @@ execution.setVariable('chooseList',JSON.stringify(chooseList));</script>
     </scriptTask>
     <userTask id="usertask1" name="DarParecer" activiti:assignee="${assignee}">
       <extensionElements>
+        <activiti:formProperty id="obrasDetail1" name="Detalhes" type="string" variable="obrasDetail" writable="false" required="true"></activiti:formProperty>
         <activiti:formProperty id="selectedFact" name="Parecer" type="simpleSelect" variable="chooseList" writable="false" required="true"></activiti:formProperty>
+        <activiti:formProperty id="comentario1" name="Comentario" type="string" default="Comentario" required="true"></activiti:formProperty>
         <activiti:taskListener event="complete" class="form.util.SelectedInfoListener">
           <activiti:field name="variableNameExpression">
             <activiti:string><![CDATA[selectedFact]]></activiti:string>
@@ -52,7 +54,7 @@ execution.setVariable('chooseList',JSON.stringify(chooseList));</script>
     </userTask>
     <callActivity id="callactivity1" name="GetUsers" calledElement="getusers111">
       <extensionElements>
-        <activiti:out source="registeredUsers" target="registeredUsers"></activiti:out>
+        <activiti:out source="registeredUsersPeritos" target="registeredUsers"></activiti:out>
       </extensionElements>
     </callActivity>
     <scriptTask id="scripttask2" name="CountPareceres" scriptFormat="javascript" activiti:autoStoreVariables="false">
@@ -102,10 +104,28 @@ execution.setVariable('isPermited', isPermited);</script>
     <sequenceFlow id="flow11" sourceRef="startevent1" targetRef="parallelgateway1"></sequenceFlow>
     <sequenceFlow id="flow12" sourceRef="parallelgateway1" targetRef="callactivity1"></sequenceFlow>
     <sequenceFlow id="flow14" sourceRef="parallelgateway1" targetRef="servicetask1"></sequenceFlow>
-    <sequenceFlow id="flow15" sourceRef="servicetask1" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="servicetask1" targetRef="scripttask3"></sequenceFlow>
     <sequenceFlow id="flow17" sourceRef="parallelgateway2" targetRef="usertask1"></sequenceFlow>
     <sequenceFlow id="flow18" sourceRef="callactivity1" targetRef="scripttask1"></sequenceFlow>
     <sequenceFlow id="flow19" sourceRef="scripttask1" targetRef="parallelgateway2"></sequenceFlow>
+    <scriptTask id="scripttask3" name="ParseObraInfo" scriptFormat="javascript" activiti:autoStoreVariables="false">
+      <script>var c1 = JSON.parse(execution.getVariable('obraInPolosDetail'));
+var s1 = '';
+for (var i = 0; i &lt; c1.length; i++) {
+    s1 += '[';
+    s1 += c1[i].name;
+    for (var j = 0; j &lt; c1[i].obras.length; j++) {
+        s1 += '[';
+        s1 += c1[i].obras[j].estado;
+        s1 += ':'
+        s1 += c1[i].obras[j].valor;
+        s1 += ']';
+    }
+    s1 += ']';
+}
+execution.setVariable('obrasDetail', s1);</script>
+    </scriptTask>
+    <sequenceFlow id="flow20" sourceRef="scripttask3" targetRef="parallelgateway2"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_darparecer3">
     <bpmndi:BPMNPlane bpmnElement="darparecer3" id="BPMNPlane_darparecer3">
@@ -139,6 +159,9 @@ execution.setVariable('isPermited', isPermited);</script>
       <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
         <omgdc:Bounds height="55.0" width="105.0" x="310.0" y="140.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask3" id="BPMNShape_scripttask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="490.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="1022.0" y="75.0"></omgdi:waypoint>
         <omgdi:waypoint x="827.0" y="150.0"></omgdi:waypoint>
@@ -166,8 +189,7 @@ execution.setVariable('isPermited', isPermited);</script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
         <omgdi:waypoint x="415.0" y="167.0"></omgdi:waypoint>
-        <omgdi:waypoint x="520.0" y="167.0"></omgdi:waypoint>
-        <omgdi:waypoint x="680.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="167.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
         <omgdi:waypoint x="700.0" y="47.0"></omgdi:waypoint>
@@ -180,6 +202,11 @@ execution.setVariable('isPermited', isPermited);</script>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
         <omgdi:waypoint x="595.0" y="47.0"></omgdi:waypoint>
         <omgdi:waypoint x="660.0" y="47.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="595.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="67.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
